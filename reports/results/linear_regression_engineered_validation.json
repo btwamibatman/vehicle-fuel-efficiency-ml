@@ -1,0 +1,26 @@
+{
+  "model": "linear_regression_engineered",
+  "seed": 42,
+  "n_train": 9816,
+  "n_val": 2080,
+  "units": "MAE and RMSE in miles per gallon; R2 unitless",
+  "train": {
+    "mae": 1.9766511368322608,
+    "rmse": 2.774609050963529,
+    "r2": 0.8019208669258786
+  },
+  "validation": {
+    "mae": 2.0186497958041634,
+    "rmse": 2.777868031137277,
+    "r2": 0.7990414683085354
+  },
+  "cv_train": {
+    "n_splits": 5,
+    "mae_mean": 1.9869461944307556,
+    "mae_std": 0.006989524376599896,
+    "rmse_mean": 2.788777858007726,
+    "rmse_std": 0.06243524304389743,
+    "r2_mean": 0.7995332805074138,
+    "r2_std": 0.008839576289060186
+  }
+}
