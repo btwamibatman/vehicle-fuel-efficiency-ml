@@ -5,7 +5,7 @@ Status
 - build_baseline          DONE (Khamza)
 - build_linear_regression DONE (Khamza)
 - build_decision_tree     DONE (Askhat)
-- build_knn               TODO Askhat
+- build_knn               DONE (Askhat)
 """
 from __future__ import annotations
 
@@ -13,6 +13,7 @@ from sklearn.base import BaseEstimator
 from sklearn.dummy import DummyRegressor
 from sklearn.linear_model import LinearRegression, Ridge
 from sklearn.pipeline import Pipeline
+from sklearn.neighbors import KNeighborsRegressor
 from sklearn.preprocessing import FunctionTransformer
 from sklearn.tree import DecisionTreeRegressor
 
@@ -63,9 +64,14 @@ def build_decision_tree(engineered: bool = False, **params) -> Pipeline:
                          engineered=engineered)
 
 
-def build_knn(**params) -> Pipeline:
-    """TODO (Askhat): KNeighborsRegressor(**params) with ``scale=True`` (mandatory for KNN)."""
-    raise NotImplementedError("KNN is Askhat's task - see docs/team_tasks.md")
+def build_knn(engineered: bool = False, **params) -> Pipeline:
+    """K-nearest-neighbours regressor on scaled features (scaling is mandatory).
+
+    Without scaling, distances would be dominated by the column with the largest
+    numeric range (model year ~2015-2027) and one-hot columns would barely count.
+    ``params`` go to ``KNeighborsRegressor`` (e.g. ``n_neighbors``, ``weights``, ``p``).
+    """
+    return make_pipeline(KNeighborsRegressor(**params), scale=True, engineered=engineered)
 
 
 # Small hyperparameter grids searched with CV on the training split only.
@@ -73,6 +79,11 @@ def build_knn(**params) -> Pipeline:
 TREE_PARAM_GRID = {
     "model__max_depth": [4, 6, 8, 10, 12, None],
     "model__min_samples_leaf": [1, 5, 10, 20],
+}
+KNN_PARAM_GRID = {
+    "model__n_neighbors": [3, 5, 10, 15, 25],
+    "model__weights": ["uniform", "distance"],
+    "model__p": [1, 2],  # 1 = Manhattan, 2 = Euclidean distance
 }
 
 
