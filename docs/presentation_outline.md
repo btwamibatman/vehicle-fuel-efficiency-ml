@@ -1,19 +1,22 @@
-# Presentation Outline (10 minutes: Aktore ~3, Khamza ~3, Askhat ~4)
+# Presentation Outline: Vehicle Fuel Efficiency Prediction
 
-Fill in numbers only from saved results in `reports/results/`. Everyone should be able to answer questions on every slide.
+Ten minutes total: Aktore about 3:00, Khamza about 3:00, Askhat about 4:00. Use only results saved in `reports/results/` or reproduced by the notebooks. Items marked TODO are intentionally not claims.
 
-| # | Slide | Speaker | Time | Content |
-|---|---|---|---|---|
-| 1 | Title and question | Aktore | 0:20 | "Can we predict a car's MPG from its specifications?" Team and roles |
-| 2 | Dataset | Aktore | 0:50 | EPA fueleconomy.gov data, model years 2015+: source, ~14k rows, features, target units (combined MPG), scope filter (no EV/PHEV), limitations (no weight/horsepower) |
-| 3 | EDA findings | Aktore | 1:30 | The 2-3 most informative plots with takeaways |
-| 4 | Prediction setup and metrics | Aktore | 0:20 | 70/15/15 split, why; MAE primary (in MPG), RMSE, R² |
-| 5 | Cleaning and features | Khamza | 1:00 | Scope filter, transmission/hybrid flags, one-hot categoricals, `displacement_per_cylinder` and whether it helped |
-| 6 | No-leakage pipeline | Khamza | 1:00 | Pipelines, preprocessing fitted on train only, duplicates grouped, shared split |
-| 7 | Baseline and Linear Regression | Khamza | 1:00 | DummyRegressor vs LR numbers |
-| 8 | Tree and KNN | Askhat | 1:15 | Models, scaling for KNN, tuned parameters |
-| 9 | Cross-validation and comparison | Askhat | 1:15 | CV mean ± std; comparison table on validation |
-| 10 | Final test result and error analysis | Askhat | 1:30 | Single test evaluation; where the model fails |
-| 11 | Conclusions and next steps | Askhat | 0:10 + Q&A | Supported conclusions, final-stage plan pointer |
+| # | Slide | Speaker | Time | Verified content / visual |
+|---|---|---:|---:|---|
+| 1 | Title, team, question | Aktore | 0:20 | Predict EPA combined US MPG of a recent vehicle from its specifications; regression task. |
+| 2 | Data and scope | Aktore | 0:45 | EPA/DOE FuelEconomy.gov `vehicles.csv`; 50,407 raw rows / 84 columns on 2026-10-08; filtered 2015+ MPG-compatible subset: 13,975 rows / 14 columns. Cite source and public-domain terms. |
+| 3 | Target, metric, and split | Aktore | 0:30 | Target is `comb08`, combined MPG. MAE is average absolute prediction error in MPG. Shared approximate 70/15/15 split; training-only EDA; test held back. |
+| 4 | EDA observations | Aktore | 1:25 | Show target distribution plus displacement and cylinder plots. Median MPG 22, mean 23.2, range 9--59; displacement-MPG correlation -0.705; cylinders-MPG correlation -0.686. Mention the model-year plot's weak correlation (0.034) and the missing weight/horsepower limitation. |
+| 5 | Cleaning and derived features | Khamza | 1:00 | Scope filter; transmission, hybrid, turbo, supercharged flags; categorical encoding; `displacement_per_cylinder`. State that no used training-column values are missing. |
+| 6 | Leakage controls | Khamza | 0:45 | Exact duplicates grouped before splitting; median imputation/scaling/one-hot encoding fitted inside pipelines on train folds only. |
+| 7 | Baseline and linear regression | Khamza | 1:15 | Saved validation: DummyRegressor MAE 4.66, RMSE 6.20, R-squared 0.00; engineered linear regression MAE 2.02, R-squared 0.80. Saved 5-fold train CV MAE 1.99 +/- 0.007. |
+| 8 | Candidate nonlinear models | Askhat | 0:55 | TODO: Decision Tree and KNN design, scaling rationale for KNN, selected parameters. Do not fill until executed. |
+| 9 | Validation comparison and error analysis | Askhat | 1:25 | TODO: validation/CV comparison and where predictions fail. Use plots/tables generated from verified runs only. |
+| 10 | Final choice, test, conclusions | Askhat | 1:40 | TODO: select by validation/CV, evaluate untouched test set once, report final MAE and limitations. No test number before that run. |
 
-Timing: 3:10 / 3:00 / 4:00 - trim slide 3 or 4 if over. Slides 9-11 stay as drafts until results exist.
+## Slide-production notes
+
+- Use saved `reports/figures/eda_target_distribution.png`, `eda_displacement_vs_mpg.png`, `eda_mpg_by_model_year.png`, and `eda_mpg_by_cylinders.png` rather than redrawing figures manually.
+- Footnote Slide 2 with FuelEconomy.gov, download date, and the exclusion of MPGe-only vehicles.
+- Do not describe displacement or cylinder associations as causal. Do not claim performance for tree/KNN or the test set until results exist.

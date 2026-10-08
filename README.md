@@ -1,94 +1,90 @@
 # Vehicle Fuel Efficiency Prediction
 
-University machine learning project (three-person team).
+## Project question
 
-**Question:** Can we predict a recent vehicle's fuel efficiency (**MPG** - EPA combined US miles per gallon; higher = more efficient) from attributes such as cylinders, engine displacement, model year, drive and transmission? This is a **regression** problem; the primary metric is **MAE in MPG**, with RMSE (MPG) and R² (unitless) reported too.
+Can we predict the EPA combined fuel efficiency of a recent vehicle from its specifications? We predict **combined US miles per gallon (MPG)**: larger values mean greater fuel efficiency. This is a supervised **regression** problem. Our primary metric is **mean absolute error (MAE), in MPG**: the average absolute distance between a predicted and EPA-rated MPG, so an MAE of 2 means predictions are off by two MPG on average. RMSE (MPG) and R-squared (unitless) are secondary metrics.
 
-## Team
+## Team roles
 
-| Member | Role |
+| Member | Responsibility |
 |---|---|
-| **Aktore** | Dataset documentation, problem statement, EDA (≥4 plots), README, presentation, final-stage plan |
-| **Khamza** | Cleaning, preprocessing, feature engineering, shared split, baseline, Linear Regression, environment |
-| **Askhat** | Decision Tree, KNN, cross-validation, tuning, model comparison, error analysis |
+| Aktore | Problem and dataset documentation, EDA, README, presentation outline, final-stage plan |
+| Khamza | Shared data loading/split, cleaning, preprocessing, feature engineering, baseline and linear regression |
+| Askhat | Decision Tree/KNN, cross-validation, tuning, model comparison, error analysis |
 
-Detailed tasks, owned files and acceptance criteria: [docs/team_tasks.md](docs/team_tasks.md). Collaboration rules: [CONTRIBUTING.md](CONTRIBUTING.md).
+See [docs/team_tasks.md](docs/team_tasks.md) for task ownership. The contribution table is intentionally left until real commits/PRs can be linked.
 
 ## Dataset
 
-US EPA/DOE **fueleconomy.gov** vehicle data, restricted to **model years 2015 and later** and to vehicles rated in MPG (no EV/plug-in/fuel-cell). About 14,000 rows. **Weight and horsepower are not in this dataset** (they were example features in the original brief). Source, scope filter, units, limitations and split rationale: [data/README.md](data/README.md). Licence text still to be confirmed by Aktore.
+We use the public U.S. EPA/DOE FuelEconomy.gov vehicle data, `vehicles.csv`, restricted to model years 2015+ and vehicles with comparable MPG ratings. The 2026-10-08 download contains 50,407 raw rows and 84 columns; the project subset contains 13,975 rows and 14 columns. The target is raw `comb08` (EPA combined MPG). Core features include model year, cylinder count, engine displacement in litres, drive, vehicle class, fuel type, and transmission.
 
-## Setup
+Source, direct download, public-domain usage terms, filtering rules, schema, data-quality checks, and limitations are documented in [data/README.md](data/README.md). Weight and horsepower are not available in this selected source; the EDA substitutes available engine displacement and model year rather than claiming those features exist.
 
-Python 3.10+ is required.
+## Setup and verified commands
 
-```bash
-python -m venv .venv
-# Windows PowerShell:  .\.venv\Scripts\Activate.ps1
-# macOS/Linux:         source .venv/bin/activate
-pip install -e ".[dev]"
-python -m ipykernel install --user --name python3   # if Jupyter cannot find a kernel
+Python 3.10+ is required. The commands below were verified on 2026-10-08 with Python 3.12 after installing the package editable.
+
+```powershell
+py -3.12 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -e ".[dev]"
+python -m vehicle_efficiency.data download
+python -m pytest
+jupyter nbconvert --to notebook --execute notebooks/01_eda.ipynb --output 01_eda.executed.ipynb
 ```
 
-## Commands
+On macOS/Linux, activate with `source .venv/bin/activate`; use `python` in place of `py -3.12` where appropriate. To run the modelling commands after setup:
 
 ```bash
-python -m vehicle_efficiency.data download          # fetch raw data into data/raw/
-python -m vehicle_efficiency.train                  # baseline -> reports/results/baseline_validation.json
-python -m vehicle_efficiency.train --cv             # also 5-fold CV on the training split
-python -m vehicle_efficiency.train --model knn      # once implemented (currently reports NOT IMPLEMENTED)
-pytest                                              # data, split, leakage and metric checks
-jupyter lab                                         # open notebooks/
+python -m vehicle_efficiency.train
+python -m vehicle_efficiency.train --cv
+jupyter lab
 ```
+
+## Reproducibility design
+
+- The shared seed-42 split is approximately 70/15/15 (train/validation/test). EDA and feature decisions use the training split only.
+- Exact duplicate project records are grouped before splitting. All fitted preprocessing remains inside scikit-learn pipelines.
+- The test set remains reserved for a single final evaluation once the team selects a model.
+
+## Current status
+
+| Item | Status |
+|---|---|
+| Dataset download and schema | Ready; source/usage terms documented |
+| Aktore EDA | Ready: executable training-only notebook, four figures, observations, and preprocessing notes |
+| Baseline | Existing saved validation result: MAE 4.66 MPG, RMSE 6.20 MPG, R-squared 0.00 |
+| Linear regression | Existing saved validation result: MAE 2.02 MPG, R-squared 0.80; 5-fold training CV MAE 1.99 +/- 0.007 MPG |
+| Decision Tree and KNN | TODO: Askhat implementation, CV, and tuning |
+| Final test result | TODO: do not run until model selection is complete |
+
+The EDA observations are descriptive, not model results. See [docs/presentation_outline.md](docs/presentation_outline.md) and [docs/final_stage_plan.md](docs/final_stage_plan.md) for the current defense and final-stage plan.
 
 ## Repository layout
 
 ```text
-src/vehicle_efficiency/   data.py (download, load, schema, split) | preprocessing.py | models.py | evaluation.py | train.py
-notebooks/                01_eda.ipynb (Aktore) | project.ipynb (final integration)
-tests/                    schema, split overlap, training-only preprocessing, metrics
-data/                     README.md (dataset docs); raw/ and processed/ are git-ignored, regenerated by the commands above
-reports/                  figures/ and results/
-docs/                     team_tasks.md, presentation_outline.md, final_stage_plan.md
+src/vehicle_efficiency/   shared data, preprocessing, models, evaluation and train code
+notebooks/01_eda.ipynb    Aktore's executable training-only EDA
+notebooks/project.ipynb   integrated final report notebook
+data/README.md            dataset source, terms, schema and limitations
+reports/figures/          generated EDA figures
+reports/results/          saved modelling results
+docs/                     team task, presentation and final-stage documents
 ```
-No significant deviations from the suggested structure; `.gitkeep` files keep empty folders in git.
-
-## Experimental design
-
-- 70/15/15 train/validation/test, seed 42, one shared split for all models; exact duplicate records are grouped so they never cross splits.
-- EDA and modelling decisions use the training data; model selection uses validation; the test set is evaluated **once**, after the final model is chosen.
-- All preprocessing (median imputation, scaling, one-hot encoding) lives inside scikit-learn Pipelines, so it is fitted on training data only - and refitted per fold in cross-validation.
-
-## Current verified status
-
-Checked on 2026-10-07 (EPA data downloaded that day; Windows, Python 3.12, scikit-learn 1.9.1, pandas 3.0.6):
-
-| Item | Status |
-|---|---|
-| Raw data download (`data download`) | ✅ works |
-| `pytest` | ✅ 18 passed |
-| Baseline command with `--cv` | ✅ runs; split 9,816 / 2,080 / 2,079 rows |
-| Baseline (DummyRegressor) validation | MAE 4.66 MPG, RMSE 6.20 MPG, R² 0.00 (saved in `reports/results/baseline_validation.json`) |
-| Linear Regression | ✅ implemented & evaluated; validation MAE 2.02 MPG, R² 0.80 (saved in `reports/results/linear_regression_engineered_validation.json`) |
-| Decision Tree, KNN | ⏳ scaffolded, fail with clear message (Askhat's tasks) |
-| Cross-validation for a real model | ✅ 5-fold CV on train for Linear Regression: MAE 1.99 ± 0.007 MPG |
-| `01_eda.ipynb` | ⏳ loads data; plots and interpretations are for Aktore |
-| `project.ipynb` | ⏳ sections 1-7 and Linear Regression executed; tree, KNN, eval, conclusions for teammates |
-| Test-set evaluation | ⏳ intentionally not run yet (reserved for final choice) |
-| Course PDF / topic screenshot | ⚠️ not available to the setup agent; requirements not cross-checked |
 
 ## Next steps
 
-- **Khamza:** K1–K6 complete (cleaning, preprocessing, `displacement_per_cylinder` justification, baseline, Linear Regression, CV). Ready for teammate review.
-- **Askhat:** A1–A4 - implement `build_decision_tree` and `build_knn` (with scaling), run cross-validation, and perform initial hyperparameter tuning.
-- **Aktore:** E1, E3 - verify dataset licence/units on fueleconomy.gov, create the four+ EDA plots with written interpretations in `01_eda.ipynb`.
+- Askhat: implement/tune Decision Tree and KNN, run cross-validation, then document comparison and error analysis.
+- Khamza: support pipeline review and add only preprocessing changes justified by validated results.
+- Aktore: transfer the final figures/observations into slides and update the outline only with later verified results.
+- Team: choose one validation-winning model, evaluate the untouched test set once, and complete the TODO sections.
 
 ## Contribution record
 
-Fill in with real links after merging. Do not add work you did not do.
+Add only real links after changes are committed and reviewed.
 
 | Member | Contribution | PR / commit link | Reviewed by |
 |---|---|---|---|
-| Aktore | | | |
-| Khamza | | | |
-| Askhat | | | |
+| Aktore | TODO | TODO | TODO |
+| Khamza | TODO | TODO | TODO |
+| Askhat | TODO | TODO | TODO |

@@ -1,67 +1,51 @@
 # Data
 
-## Source (verified)
+## Source and access
 
-| Item | Value |
-|---|---|
-| Dataset | **Fuel Economy Data** (`vehicles.csv`) - U.S. Environmental Protection Agency (EPA) / U.S. Department of Energy (DOE), published on fueleconomy.gov |
-| Page | https://www.fueleconomy.gov/feg/ws/index.shtml (data dictionary and download) |
-| Download | https://www.fueleconomy.gov/feg/epadata/vehicles.csv.zip |
-| Coverage | Model years 1984-2027 in the file (the 2027 rows are model years already announced); this project uses **2015 and later** |
-| Raw size | 50,407 rows x 84 columns (checked on 2026-10-07) |
-| Target | `mpg` = raw column `comb08`: EPA **combined** fuel economy in **US miles per gallon** (about 55% city / 45% highway). Higher = more efficient |
+The source is the U.S. EPA / DOE FuelEconomy.gov **Vehicle** download, `vehicles.csv`:
 
-**Licence / usage terms:** this is U.S. federal government data. **Aktore: open the fueleconomy.gov page above, copy the exact usage/licence statement into this file and cite the source in the slides.** I did not confirm the licence wording automatically, so no claim is made here.
+- Data page and dictionary: https://www.fueleconomy.gov/feg/ws/index.shtml
+- Download used by the project: https://www.fueleconomy.gov/feg/epadata/vehicles.csv.zip
+- Acquisition: `python -m vehicle_efficiency.data download` downloads the ZIP and extracts the unchanged file to `data/raw/vehicles.csv`. It is intentionally Git-ignored because EPA updates it.
+- Accessed for this EDA: 2026-10-08. The service describes the file as covering model years 1984 through the current model year and supplies CSV/XML downloads.
 
-## Get the raw data
+### Licence / usage terms
 
-```bash
-python -m vehicle_efficiency.data download          # idempotent; --force to re-download
-```
+EPA's [Standard Open Data License](https://edg.epa.gov/EPA_Data_License.htm) says that, unless otherwise specified, EPA-produced data are in the public domain and not subject to domestic copyright protection under 17 U.S.C. §105. Use is therefore permitted for this course project with attribution to EPA/DOE FuelEconomy.gov. The same statement disclaims warranty for accuracy or fitness; users should consider the metadata and limitations. This repository retains the source URL and download procedure rather than redistributing the raw file.
 
-`data/raw/vehicles.csv` is **never edited** (git-ignored, re-downloadable). If the download is blocked, download the zip from the link above and extract `vehicles.csv` into `data/raw/`. Because EPA updates the file regularly, the row count can change over time; record the download date when you report results.
+## Project subset
 
-## Scope filter (done in code: `data.prepare`)
+The raw file downloaded on 2026-10-08 has **50,407 rows x 84 columns**. `vehicle_efficiency.data.prepare` retains model year >= 2015 and removes EV, fuel-cell, plug-in-hybrid, CNG/bi-fuel, electricity, hydrogen, and natural-gas entries, because their efficiency can be reported as MPGe rather than comparable gasoline MPG. The resulting modelling frame has **13,975 rows x 14 columns**. The deterministic seed-42 split is approximately 70/15/15; the EDA training partition has **9,816 rows**.
 
-Applied before splitting; it learns nothing from the data.
-
-| Rule | Why |
-|---|---|
-| model year >= 2015 (`MIN_YEAR` in `data.py`) | the requirement "recent vehicles only" |
-| drop EV, fuel-cell, plug-in hybrid, CNG/bi-fuel rows (`atvType`) and electricity/hydrogen/natural-gas fuel types | their efficiency is reported in **MPGe**, which is not comparable to MPG |
-| kept: gasoline, diesel, flex-fuel and ordinary hybrids | efficiency is real MPG |
-
-Result at time of writing: **13,975 rows**, model years 2015-2027, MPG range 9-59, mean 23.2, **no missing values** in the used columns. 416 rows are exact duplicates of another row on all project columns (kept together in one split).
-
-## Columns used
-
-| Project column | Raw column | Type | Meaning |
+| Project column | Raw column | Type | Meaning / unit |
 |---|---|---|---|
-| `mpg` | `comb08` | target | combined MPG (US) |
-| `model_year` | `year` | integer | 2015-2027 |
-| `cylinders` | `cylinders` | integer | engine cylinders |
-| `displacement` | `displ` | continuous | engine displacement in **litres** |
-| `drive` | `drive` | categorical | e.g. Front-Wheel Drive, All-Wheel Drive |
-| `vehicle_class` | `VClass` | categorical | EPA size class (22 values) |
-| `fuel_type` | `fuelType1` | categorical | Regular/Premium/Midgrade Gasoline, Diesel |
-| `transmission` | derived from `trany` | categorical | Automatic / Manual / Other |
-| `hybrid` | derived from `atvType` | 0/1 | ordinary hybrid |
-| `turbo`, `supercharged` | `tCharger`, `sCharger` | 0/1 | forced induction |
-| `make`, `model` | `make`, `model` | text | **not features**: kept for grouping and error analysis only |
+| `mpg` | `comb08` | integer, target | EPA combined fuel economy, US miles per gallon (MPG); higher is more efficient |
+| `model_year` | `year` | integer | vehicle model year |
+| `cylinders` | `cylinders` | numeric | number of engine cylinders |
+| `displacement` | `displ` | numeric | engine displacement, litres |
+| `drive` | `drive` | categorical | driven axle / drive type |
+| `vehicle_class` | `VClass` | categorical | EPA vehicle size class |
+| `fuel_type` | `fuelType1` | categorical | primary fuel type |
+| `transmission` | derived from `trany` | categorical | Automatic, Manual, or Other |
+| `hybrid`, `turbo`, `supercharged` | derived from `atvType`, `tCharger`, `sCharger` | binary | technology flags |
+| `make`, `model` | `make`, `model` | text | retained for grouping/error analysis, not modelling features |
 
-## Requested features not available
+EPA defines `comb08` as combined MPG for the primary fuel and `displ` as displacement in litres in its [data dictionary](https://www.fueleconomy.gov/feg/ws/index.shtml). The target is an EPA laboratory rating, not a driver-measured consumption value.
 
-- **Weight** and **horsepower** are **not** in this dataset. This conflicts with the original project brief, which listed them as example features. Cylinders, displacement and model year are available. The team should confirm with the course requirements that this is acceptable.
-- `data/README.md` limitations below apply to any conclusions.
+## Data-quality findings for preprocessing
 
-## Limitations (Aktore to extend)
+These findings are from `load_split("train")` on the 2026-10-08 download (seed 42), and are reproduced by `notebooks/01_eda.ipynb`.
 
-- No weight, horsepower or aerodynamic data - a major driver of real-world MPG is missing, so error floors may be high.
-- MPG values are **EPA laboratory test ratings**, not measured real-world consumption.
-- The file contains many near-identical rows (same model with small variants, same model in consecutive years). A random split can put such near-duplicates in train and validation, which can make scores optimistic. Only *exact* duplicates are grouped.
-- EV, plug-in hybrid and fuel-cell vehicles are excluded, so conclusions say nothing about them.
-- EPA revises the file; rerunning later may give slightly different data.
+- All 14 project columns have the expected numeric/string type; no used-column values are missing in the training split.
+- There are no exact duplicate rows once `row_id` is included. There are **325** duplicate vehicle records after omitting `row_id`; exact duplicate project records are grouped before splitting, so they do not cross partitions.
+- No non-positive MPG, displacement, or cylinder values were found. The observed training ranges are MPG 9--59, displacement 0.9--8.4 L, cylinders 3--16, and model year 2015--2027.
+- Rare but plausible values need no automatic deletion: 12 rows have 16 cylinders, 20 have 5 cylinders, 17 have MPG >=55, and 14 have displacement >=8 L. Preserve them; use robust diagnostics/model validation rather than treating them as errors.
+- `cylinders` is numeric in the loaded frame but semantically discrete. Khamza should retain the existing documented treatment and keep all imputation/scaling inside the training-fitted pipeline. No cleaning change is requested by this EDA.
 
-## Split design
+## Limitations
 
-Random 70/15/15 train/validation/test over records, seed 42. Intended scenario: predict combined MPG for a new, recent vehicle configuration from its specification. Exact duplicate records (identical on all project columns) are grouped (`GroupShuffleSplit`) so they cannot cross splits. A stricter alternative worth discussing in the defense: group by `make`+`model` so whole models are unseen at test time. The assignment (raw `row_id` -> split) is written to `data/processed/split_assignments.csv` when you run the baseline.
+- This dataset does **not** provide curb weight or horsepower, so the brief's weight- and horsepower-versus-efficiency plots cannot be made from the selected source. The EDA uses displacement and model year instead.
+- Ratings are standardised EPA estimates rather than real-world fuel use; driving behaviour, weather, load, and maintenance are absent.
+- The scope excludes EVs, fuel-cell vehicles, plug-in hybrids, and CNG/bi-fuel vehicles. Conclusions must not be extended to them.
+- Near-identical variants and repeated models may make a record-level random split optimistic. Exact duplicates are grouped, but a future robustness check could group by make/model.
+- EPA may revise records, so row counts and results can change after a later download.
