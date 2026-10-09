@@ -1,0 +1,140 @@
+{
+  "seed": 42,
+  "n_train": 9816,
+  "n_val": 2080,
+  "units": "MAE and RMSE in miles per gallon; R2 unitless",
+  "selected_by": "lowest validation MAE",
+  "best_model": "Decision Tree",
+  "models": {
+    "Baseline (mean)": {
+      "cv_train": {
+        "n_splits": 5,
+        "cv": "GroupKFold (duplicates grouped)",
+        "grid": {},
+        "n_candidates": 1,
+        "best_params": {},
+        "cv_mae_mean": 4.6354647696624705,
+        "cv_mae_std": 0.06680134051799919,
+        "cv_rmse_mean": 6.232690640334321,
+        "cv_r2_mean": -0.0006737157141202043
+      },
+      "train": {
+        "mae": 4.634994036979693,
+        "rmse": 6.234224468331758,
+        "r2": 0.0
+      },
+      "validation": {
+        "mae": 4.6617603324243,
+        "rmse": 6.196670638699539,
+        "r2": -1.2949249694749199e-07
+      }
+    },
+    "Linear Regression": {
+      "cv_train": {
+        "n_splits": 5,
+        "cv": "GroupKFold (duplicates grouped)",
+        "grid": {},
+        "n_candidates": 1,
+        "best_params": {},
+        "cv_mae_mean": 1.9856382775229282,
+        "cv_mae_std": 0.03641533697175625,
+        "cv_rmse_mean": 2.7868923393902647,
+        "cv_r2_mean": 0.7997878531914782
+      },
+      "train": {
+        "mae": 1.9766511436889782,
+        "rmse": 2.774609050962519,
+        "r2": 0.8019208669260228
+      },
+      "validation": {
+        "mae": 2.0186497969648487,
+        "rmse": 2.7778680125754702,
+        "r2": 0.7990414709941586
+      }
+    },
+    "Decision Tree": {
+      "cv_train": {
+        "n_splits": 5,
+        "cv": "GroupKFold (duplicates grouped)",
+        "grid": {
+          "max_depth": [
+            4,
+            6,
+            8,
+            10,
+            12,
+            null
+          ],
+          "min_samples_leaf": [
+            1,
+            5,
+            10,
+            20
+          ]
+        },
+        "n_candidates": 24,
+        "best_params": {
+          "max_depth": null,
+          "min_samples_leaf": 1
+        },
+        "cv_mae_mean": 1.0904779126515218,
+        "cv_mae_std": 0.02365698940499103,
+        "cv_rmse_mean": 1.7332261814446823,
+        "cv_r2_mean": 0.9222965220083926
+      },
+      "train": {
+        "mae": 0.5913725759972553,
+        "rmse": 1.02968357318689,
+        "r2": 0.9727201047691946
+      },
+      "validation": {
+        "mae": 1.0593583981320271,
+        "rmse": 1.6907830777078525,
+        "r2": 0.9255509750176615
+      }
+    },
+    "KNN": {
+      "cv_train": {
+        "n_splits": 5,
+        "cv": "GroupKFold (duplicates grouped)",
+        "grid": {
+          "n_neighbors": [
+            3,
+            5,
+            10,
+            15,
+            25
+          ],
+          "weights": [
+            "uniform",
+            "distance"
+          ],
+          "p": [
+            1,
+            2
+          ]
+        },
+        "n_candidates": 20,
+        "best_params": {
+          "n_neighbors": 3,
+          "p": 1,
+          "weights": "uniform"
+        },
+        "cv_mae_mean": 1.1117598346048194,
+        "cv_mae_std": 0.032896087558721025,
+        "cv_rmse_mean": 1.6499014238695715,
+        "cv_r2_mean": 0.9296295133031638
+      },
+      "train": {
+        "mae": 0.7758761206193969,
+        "rmse": 1.220569503208052,
+        "r2": 0.961668116592309
+      },
+      "validation": {
+        "mae": 1.092628205128205,
+        "rmse": 1.66474247899413,
+        "r2": 0.9278265688361875
+      }
+    }
+  }
+}

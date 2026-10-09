@@ -1,0 +1,5 @@
+,MAE (MPG),RMSE (MPG),R2
+Decision Tree,1.059,1.691,0.926
+KNN,1.093,1.665,0.928
+Linear Regression,2.019,2.778,0.799
+Baseline (mean),4.662,6.197,-0.0

@@ -1,0 +1,11 @@
+make,model,model_year,vehicle_class,cylinders,displacement,drive,transmission,fuel_type,hybrid,turbo,actual_mpg,predicted_mpg,error
+Buick,LaCrosse eAssist,2019,Midsize Cars,4.0,2.5,Front-Wheel Drive,Automatic,Regular Gasoline,1,0,29,42.0,13.0
+Toyota,Prius,2023,Midsize Cars,4.0,2.0,Front-Wheel Drive,Automatic,Regular Gasoline,1,0,57,44.0,-13.0
+Mitsubishi,Outlander 2WD,2026,Small Sport Utility Vehicle 2WD,4.0,1.5,Front-Wheel Drive,Automatic,Regular Gasoline,1,1,28,39.5,11.5
+Toyota,Camry Hybrid LE,2018,Midsize Cars,4.0,2.5,Front-Wheel Drive,Automatic,Regular Gasoline,1,0,52,42.0,-10.0
+Toyota,Camry Hybrid LE,2019,Midsize Cars,4.0,2.5,Front-Wheel Drive,Automatic,Regular Gasoline,1,0,52,42.0,-10.0
+Toyota,Corolla Hybrid,2020,Compact Cars,4.0,1.8,Front-Wheel Drive,Automatic,Regular Gasoline,1,0,52,42.0,-10.0
+Toyota,Prius XLE/LTD,2023,Midsize Cars,4.0,2.0,Front-Wheel Drive,Automatic,Regular Gasoline,1,0,52,44.0,-8.0
+Ford,Fusion FWD,2020,Midsize Cars,4.0,2.5,Front-Wheel Drive,Automatic,Regular Gasoline,0,0,24,31.4,7.4
+Ford,C-MAX Hybrid FWD,2017,Large Cars,4.0,2.0,Front-Wheel Drive,Automatic,Regular Gasoline,1,0,40,47.0,7.0
+Toyota,Prius Eco,2018,Midsize Cars,4.0,1.8,Front-Wheel Drive,Automatic,Regular Gasoline,1,0,56,49.0,-7.0

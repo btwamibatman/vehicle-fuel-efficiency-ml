@@ -1,0 +1,11 @@
+{
+  "model": "Decision Tree",
+  "selected_by": "lowest validation MAE",
+  "n_test": 2079,
+  "units": "MAE and RMSE in miles per gallon; R2 unitless",
+  "test": {
+    "mae": 1.0380722334748442,
+    "rmse": 1.6676219921881363,
+    "r2": 0.9280597544390035
+  }
+}
