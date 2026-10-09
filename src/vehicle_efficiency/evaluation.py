@@ -1,4 +1,4 @@
-"""Metrics and cross-validation helpers shared by every model."""
+"""Metrics, cross-validation and tuning helpers shared by every model."""
 from __future__ import annotations
 
 import json
@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 from sklearn.base import BaseEstimator
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
-from sklearn.model_selection import KFold, cross_validate
+from sklearn.model_selection import GridSearchCV, GroupKFold, KFold, cross_validate
 
 from .data import PROJECT_ROOT
 
@@ -64,3 +64,54 @@ def save_results(result: dict, filename: str) -> Path:
     path = RESULTS_DIR / filename
     path.write_text(json.dumps(result, indent=2))
     return path
+
+
+# ---------------------------------------------------------------------------
+# Hyperparameter tuning (Askhat)
+# ---------------------------------------------------------------------------
+
+def grouped_cv(n_splits: int = 5) -> GroupKFold:
+    """Folds that keep exact duplicate records together.
+
+    The shared split already groups duplicates (``data.make_splits``); plain KFold
+    inside the training split would not, and a duplicate in another fold is a free
+    exact match for KNN and a deep tree, which flatters their CV score.
+    """
+    return GroupKFold(n_splits=n_splits)
+
+
+def tune_pipeline(pipeline: BaseEstimator, param_grid: dict, X: pd.DataFrame,
+                  y: pd.Series, groups: pd.Series | None = None,
+                  n_splits: int = 5, seed: int = 42) -> tuple[BaseEstimator, dict, pd.DataFrame]:
+    """Grid search on training data only; MAE selects the best setting.
+
+    The whole pipeline (imputer, scaler, encoder, model) is refitted inside every
+    fold. With ``groups`` the folds keep duplicates together (:func:`grouped_cv`),
+    otherwise shuffled KFold. Returns the best pipeline refitted on all of
+    ``X``, a summary dict and the full grid table (MAE/RMSE in MPG).
+    """
+    cv = grouped_cv(n_splits) if groups is not None else KFold(n_splits, shuffle=True,
+                                                              random_state=seed)
+    scoring = {"mae": "neg_mean_absolute_error",
+               "rmse": "neg_root_mean_squared_error", "r2": "r2"}
+    search = GridSearchCV(pipeline, param_grid, cv=cv, scoring=scoring, refit="mae",
+                          return_train_score=True, n_jobs=-1)
+    search.fit(X, y, groups=groups)
+    res = pd.DataFrame(search.cv_results_)
+    table = pd.DataFrame({
+        "params": res["params"].map(lambda p: {k.removeprefix("model__"): v for k, v in p.items()}),
+        "cv_mae_mean": -res["mean_test_mae"], "cv_mae_std": res["std_test_mae"],
+        "cv_rmse_mean": -res["mean_test_rmse"], "cv_r2_mean": res["mean_test_r2"],
+        "train_mae_mean": -res["mean_train_mae"],
+    }).sort_values("cv_mae_mean").reset_index(drop=True)
+    best = table.iloc[0]
+    summary = {
+        "n_splits": n_splits,
+        "cv": "GroupKFold (duplicates grouped)" if groups is not None else "KFold (shuffled)",
+        "grid": {k.removeprefix("model__"): v for k, v in param_grid.items()},
+        "n_candidates": len(table),
+        "best_params": best["params"],
+        "cv_mae_mean": float(best["cv_mae_mean"]), "cv_mae_std": float(best["cv_mae_std"]),
+        "cv_rmse_mean": float(best["cv_rmse_mean"]), "cv_r2_mean": float(best["cv_r2_mean"]),
+    }
+    return search.best_estimator_, summary, table
