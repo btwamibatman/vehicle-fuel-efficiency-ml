@@ -85,6 +85,6 @@ Add only real links after changes are committed and reviewed.
 
 | Member | Contribution | PR / commit link | Reviewed by |
 |---|---|---|---|
-| Aktore | TODO | TODO | TODO |
+| Aktore | Dataset documentation, training-only EDA, figures, presentation outline, final-stage plan | [PR #1](https://github.com/btwamibatman/vehicle-fuel-efficiency-ml/pull/1) | TODO |
 | Khamza | TODO | TODO | TODO |
 | Askhat | TODO | TODO | TODO |

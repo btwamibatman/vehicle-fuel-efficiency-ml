@@ -1,35 +1,24 @@
 # Final-stage Plan
 
-## Current evidence and open problems
+## Completed decision path
 
-- The executable training-only EDA is complete. Engine displacement and cylinder count are strongly negatively associated with MPG, while model year alone is weak in this subset. These are descriptive findings, not a model selection result.
-- Baseline and linear-regression validation results are saved. Decision Tree and KNN implementation, tuning, and comparison are still TODO.
-- The test partition must remain untouched until the team chooses a candidate using validation/CV evidence.
-- The selected EPA source lacks vehicle weight and horsepower. The model may miss important physical drivers of fuel economy, and the original requested plots were transparently adapted.
-- Exact duplicates are grouped, but related make/model variants can still occur across partitions. A make+model grouped split is a possible robustness check if course time permits.
-- EPA updates the source periodically, so the raw file and row count must be dated whenever results are reproduced.
+- Training-only EDA is complete. Engine displacement and cylinder count are strongly negatively associated with MPG, while model year alone is weak in this subset. These are descriptive findings, not causal claims.
+- Baseline, Linear Regression, Decision Tree, and KNN were compared with grouped 5-fold training CV and the shared validation set. The Decision Tree had the lowest validation MAE: **1.059 MPG**.
+- The Decision Tree was then evaluated once on the held-out 2,079-row test set: **MAE 1.038 MPG, RMSE 1.668 MPG, R-squared 0.928**. The test result is recorded in `reports/results/final_test.json`.
 
-## Plan to final submission
+## Final deliverables
 
-| Order | Deliverable | Owner | Acceptance criterion |
+| Order | Deliverable | Owner | Status / acceptance criterion |
 |---:|---|---|---|
-| 1 | Implement Decision Tree and KNN pipelines | Askhat | Both run through the shared split and report validation metrics; KNN uses pipeline scaling. |
-| 2 | Cross-validate and tune only on training data | Askhat, with Khamza review | Parameters/search space and mean +/- standard deviation are recorded; no test access. |
-| 3 | Compare candidates | Askhat | One table with baseline, linear regression, tree, and KNN validation/CV MAE (primary), with RMSE/R-squared where available. |
-| 4 | Check pipeline/data assumptions | Khamza | Confirm no leakage, preprocessing fitted per fold, and any change is justified by a reproducible result. |
-| 5 | Select model and run final test once | Team | Decision is recorded from validation/CV; exactly one final test evaluation is saved. |
-| 6 | Error analysis and limitations | Askhat | Analyze residuals/subgroups of the chosen model; distinguish evidence from speculation. |
-| 7 | Final report and slides | Aktore | Replace TODOs only with verified results, include source/terms, EDA figures, limitations, and contribution links. |
+| 1 | Preserve reproducibility | Khamza | Shared loader/split and pipeline tests pass; do not change the selected model after reading the test result. |
+| 2 | Final error analysis | Askhat | Use committed validation residual, actual-vs-predicted, vehicle-class, and largest-error artifacts; distinguish observed patterns from explanations. |
+| 3 | Final report notebook | Team | Run `project.ipynb` top-to-bottom in the final environment and resolve only real execution issues. |
+| 4 | Slides and defense rehearsal | Aktore / all | Use `presentation_outline.md`; present only committed metrics and label the EPA/source limitations. |
+| 5 | Contribution record | All | Add only real PR/commit links and reviewer information after review/merge. |
 
-## Decision rule
+## Remaining limitations and risks
 
-Choose the model with the strongest validation/CV evidence on **MAE in MPG**, considering instability and complexity. Report RMSE and R-squared as supporting context. Do not select based on the held-out test result.
-
-## Risks and mitigations
-
-| Risk | Mitigation |
-|---|---|
-| Unfinished nonlinear models | Time-box tuning and retain the verified linear-regression reference; do not invent comparison results. |
-| Leakage or inconsistent feature treatment | Reuse the shared loader/split and pipeline functions; run the existing tests before final evaluation. |
-| Overconfident generalisation | State that the sample excludes MPGe vehicle types and lacks weight/horsepower; present EPA ratings as laboratory estimates. |
-| Data changes upstream | Keep the download date, rerun the notebook, and update recorded row counts/results together. |
+- The selected EPA source lacks vehicle weight, horsepower, aerodynamic characteristics, and real-world driving conditions. Predictions concern EPA laboratory ratings, not a driver's observed fuel use.
+- EVs, fuel-cell vehicles, plug-in hybrids, and CNG/bi-fuel vehicles are out of scope because their reported efficiency is not directly comparable to MPG here.
+- Exact duplicates are grouped, but related make/model variants may still cross record-level partitions; results may be optimistic for completely unseen models.
+- EPA updates the source periodically. Preserve the dataset download date with any reproduced numbers.
