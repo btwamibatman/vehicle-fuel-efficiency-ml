@@ -72,19 +72,4 @@ reports/results/          saved modelling results
 docs/                     team task, presentation and final-stage documents
 ```
 
-## Next steps
 
-- Askhat: implement/tune Decision Tree and KNN, run cross-validation, then document comparison and error analysis.
-- Khamza: support pipeline review and add only preprocessing changes justified by validated results.
-- Aktore: transfer the final figures/observations into slides and update the outline only with later verified results.
-- Team: choose one validation-winning model, evaluate the untouched test set once, and complete the TODO sections.
-
-## Contribution record
-
-Add only real links after changes are committed and reviewed.
-
-| Member | Contribution | PR / commit link | Reviewed by |
-|---|---|---|---|
-| Aktore | Dataset documentation, training-only EDA, figures, presentation outline, final-stage plan | [PR #1](https://github.com/btwamibatman/vehicle-fuel-efficiency-ml/pull/1) | TODO |
-| Khamza | TODO | TODO | TODO |
-| Askhat | TODO | TODO | TODO |
