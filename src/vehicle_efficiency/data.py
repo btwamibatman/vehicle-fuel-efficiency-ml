@@ -104,7 +104,7 @@ def prepare(df: pd.DataFrame, min_year: int = MIN_YEAR) -> pd.DataFrame:
 
     trany = df["trany"].fillna("")
     df["transmission"] = np.select(
-        [trany.str.startswith("Manual"), trany.str.startswith("Automatic")],
+        [trany.str.startswith("Manual"), trany.str.startswith("Auto")],
         ["Manual", "Automatic"], default="Other",
     )
     df["hybrid"] = (df["atv_type"] == "Hybrid").astype(int)
