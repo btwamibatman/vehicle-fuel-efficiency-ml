@@ -57,7 +57,23 @@ def test_prepare_filters_scope_and_derives_flags():
     assert (out["model_year"] >= MIN_YEAR).all()
     assert list(out["hybrid"]) == [1, 0, 0]
     assert list(out["turbo"]) == [0, 1, 0]
-    assert list(out["transmission"]) == ["Automatic", "Automatic", "Other"]
+    assert list(out["transmission"]) == ["Automatic", "Automatic", "Automatic"]
+
+
+@pytest.mark.parametrize(
+    ("raw_value", "expected"),
+    [
+        ("Automatic 8-spd", "Automatic"),
+        ("Auto(AV-S6)", "Automatic"),
+        ("Manual 5-spd", "Manual"),
+        (None, "Other"),
+    ],
+)
+def test_prepare_normalizes_epa_transmission_labels(raw_value, expected):
+    df = raw_like_frame().iloc[[1]].copy()
+    df["trany"] = raw_value
+
+    assert prepare(df).iloc[0]["transmission"] == expected
 
 
 def test_raw_to_project_names_cover_required_columns():
