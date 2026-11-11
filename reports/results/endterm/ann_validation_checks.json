@@ -1,0 +1,39 @@
+{
+  "baseline_tests_passed": 18,
+  "expanded_tests_passed": 27,
+  "smoke": {
+    "actual_train_rows": 512,
+    "actual_validation_rows": 128,
+    "epochs": 3,
+    "passed": true
+  },
+  "full_grid_candidates": 4,
+  "fresh_kernel_notebook": {
+    "executed_code_cells": 8,
+    "embedded_charts": 2,
+    "passed": true
+  },
+  "full_grid_repeat": "history/search/validation predictions exactly identical on repeated full run",
+  "bundle_roundtrip_and_metrics": "all 2080 validation predictions verified",
+  "independent_numpy_metrics": {
+    "mae": 1.0827148377895355,
+    "rmse": 1.5229709675578207,
+    "r2": 0.9395958916007535
+  },
+  "source_hashes_match": true,
+  "midterm_and_raw_hash_audit": {
+    "preexisting_files_checked": 39,
+    "only_changed_existing_file": "pyproject.toml",
+    "all_other_files_unchanged": true
+  },
+  "visual_review": "HTML notebook summary, results table, learning curves and takeaways inspected in browser; both exported figures inspected",
+  "test_evaluated": false,
+  "limitations": [
+    "Single seed; validation reused for stopping and selection",
+    "No fresh independent test or ANN CV",
+    "No early-stopping ablation",
+    "OS/CPU/library changes can affect exact reproducibility"
+  ],
+  "pip_check": "No broken requirements found",
+  "git_diff_check": "passed"
+}
