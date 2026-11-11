@@ -1,12 +1,4 @@
-"""Model builders. Every model is a full Pipeline: features -> preprocessing -> estimator.
 
-Status
-------
-- build_baseline          DONE (Khamza)
-- build_linear_regression DONE (Khamza)
-- build_decision_tree     DONE (Askhat)
-- build_knn               DONE (Askhat)
-"""
 from __future__ import annotations
 
 from sklearn.base import BaseEstimator

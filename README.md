@@ -141,3 +141,41 @@ Task ownership is detailed in [`docs/team_tasks.md`](docs/team_tasks.md). The de
 - No vehicle weight, horsepower or aerodynamics in the source data. These are major MPG drivers.
 - Only model years 2015+ are covered, so predictions for older vehicles are out of scope.
 - EPA ratings are lab-test values and can differ from real-world fuel economy.
+
+Khamza files: data.py, preprocessing, models, tests, pyprojects.
+
+Pipeline:
+[1. data.py] ───────► [2. preprocessing.py] ───────► [3. models.py] ───────► [4. train.py / compare.py] 
+(Сырые данные,           (Инженерия признаков,        (Сборка в Pipeline:        (Обучение, подбор тюнинга,
+   очистка, деление)        масштабирование, OHE)        препроцессинг + модель)    сравнение и финальный тест)
+
+Метрики:
+GroupShuffleSplit - чтобы одна и та же машина не попала одновременно в обучение и тест.
+
+MAE (средняя абсолютная ошибка): на сколько миль на галлон модель в среднем ошибается. У Decision Tree 1.059 MPG, то есть примерно на 1 MPG. Чем меньше, тем лучше.
+RMSE: похожа на MAE, но сильнее штрафует большие ошибки. Если RMSE намного больше MAE, значит, есть отдельные сильные промахи.
+R2: доля разброса MPG, которую модель объясняет. 1.0 идеально, 0 то же, что просто предсказывать среднее. У Decision Tree 0.926, то есть 92.6%.
+
+
+
+Running commands:
+
+cleaning, leakage controls, feature engineering (displacement_per_cylinder), baseline and linear regression:
+
+Khamza Contributuin:
+python -m vehicle_efficiency.train --model linear_regression --cv --engineered
+
+
+Full Project pipeline:
+python -m vehicle_efficiency.compare
+
+Run tests:
+powershell
+python -m pytest
+
+Train a model:
+powershell
+python -m vehicle_efficiency.train --model decision_tree --cv
+
+Launch Jupyter lab
+jupyter lab notebooks/project.ipynb
