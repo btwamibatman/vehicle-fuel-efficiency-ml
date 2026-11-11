@@ -208,6 +208,12 @@ statistical superiority or transfer to new designs is not established.
 
 ## Объяснение Хамзе
 
+Подробный разбор: [`endterm_ann_explained_ru.md`](endterm_ann_explained_ru.md).
+Готовая речь примерно на четыре минуты, порядок показа и ответы преподавателю:
+[`endterm_ann_defense_ru.md`](endterm_ann_defense_ru.md).
+Практический показ одной реальной validation-машины без обучения:
+`python -X utf8 scripts/ann_walkthrough.py` из корня проекта.
+
 Вход ANN — те же характеристики машины, что у классических моделей. После
 one-hot получается 40 чисел. Два скрытых слоя, 64 и 32 нейрона, учатся находить
 нелинейные зависимости. Последний нейрон выдаёт одно число: после обратного
