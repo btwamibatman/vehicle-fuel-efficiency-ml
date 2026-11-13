@@ -49,3 +49,14 @@ These findings are from `load_split("train")` on the 2026-10-08 download (seed 4
 - The scope excludes EVs, fuel-cell vehicles, plug-in hybrids, and CNG/bi-fuel vehicles. Conclusions must not be extended to them.
 - Near-identical variants and repeated models may make a record-level random split optimistic. Exact duplicates are grouped, but a future robustness check could group by make/model.
 - EPA may revise records, so row counts and results can change after a later download.
+
+## Feature extension on the unchanged snapshot
+
+The separate 2026-11-14 study attaches `startStop` and `trany` to the original
+train/validation frames by raw `row_id`, after splitting. `start_stop` maps Y/N
+to 1/0 (unknown remains missing); `transmission_detail` keeps the trimmed raw
+category and replaces coarse transmission in the full arm. On train both source
+fields are complete, with 33 detailed transmission categories. Original
+`COLUMNS`, duplicate groups, splits, filtering and manifests remain unchanged.
+The expanded input contract has its own per-variant manifest in the saved ANN
+bundles. See `docs/feature_extension_results_ru.md` for the protocol and results.

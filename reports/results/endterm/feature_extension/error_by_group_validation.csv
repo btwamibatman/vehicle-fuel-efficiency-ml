@@ -1,0 +1,111 @@
+group,n,mae,mean_error,model,group_type
+0,1839,0.7427949972811311,-0.028276237085372507,KNN,hybrid
+1,241,1.5311203319502071,0.15352697095435697,KNN,hybrid
+Compact Cars,228,1.118421052631579,-0.1856725146198831,KNN,vehicle_class
+Large Cars,137,0.7566909975669098,0.0024330900243308786,KNN,vehicle_class
+Midsize Cars,277,0.9651022864019251,-0.09626955475330928,KNN,vehicle_class
+Midsize Station Wagons,18,1.7037037037037042,0.9629629629629632,KNN,vehicle_class
+Minicompact Cars,96,0.5208333333333331,0.10416666666666673,KNN,vehicle_class
+Minivan - 2WD,7,0.523809523809524,0.23809523809523828,KNN,vehicle_class
+Minivan - 4WD,4,0.5,0.5,KNN,vehicle_class
+Small Pickup Trucks 2WD,16,0.5625000000000002,-0.18749999999999978,KNN,vehicle_class
+Small Pickup Trucks 4WD,26,0.6153846153846152,0.12820512820512817,KNN,vehicle_class
+Small Sport Utility Vehicle 2WD,123,0.962059620596206,0.3170731707317073,KNN,vehicle_class
+Small Sport Utility Vehicle 4WD,255,0.90718954248366,-0.10457516339869284,KNN,vehicle_class
+Small Station Wagons,55,0.9151515151515155,-0.09090909090909104,KNN,vehicle_class
+Special Purpose Vehicle 2WD,26,0.7435897435897434,0.15384615384615405,KNN,vehicle_class
+Special Purpose Vehicle 4WD,7,0.2857142857142855,0.2857142857142855,KNN,vehicle_class
+Standard Pickup Trucks 2WD,54,0.6234567901234566,-0.20370370370370383,KNN,vehicle_class
+Standard Pickup Trucks 4WD,93,0.7670250896057347,-0.09318996415770613,KNN,vehicle_class
+Standard Sport Utility Vehicle 2WD,99,0.44781144781144777,0.037037037037036945,KNN,vehicle_class
+Standard Sport Utility Vehicle 4WD,232,0.8635057471264368,0.05890804597701159,KNN,vehicle_class
+Subcompact Cars,183,0.7832422586520946,0.007285974499089266,KNN,vehicle_class
+Two Seaters,140,0.5809523809523809,0.06666666666666662,KNN,vehicle_class
+"Vans, Cargo Type",2,0.3333333333333339,0.3333333333333339,KNN,vehicle_class
+"Vans, Passenger Type",2,0.6666666666666679,0.0,KNN,vehicle_class
+0.0,923,0.6948356807511737,-0.05922715781870715,KNN,start_stop
+1.0,1157,0.9452607317775856,0.034284067991933176,KNN,start_stop
+Automatic (AM-S6),23,1.4057971014492752,0.30434782608695665,KNN,transmission_detail
+Automatic (AM-S7),124,0.6155913978494623,0.09408602150537636,KNN,transmission_detail
+Automatic (AM-S8),34,0.39215686274509787,1.5673736818237505e-16,KNN,transmission_detail
+Automatic (AM-S9),1,0.0,0.0,KNN,transmission_detail
+Automatic (AM6),10,0.8666666666666671,0.8,KNN,transmission_detail
+Automatic (AM7),33,0.7373737373737377,0.05050505050505038,KNN,transmission_detail
+Automatic (AM8),18,1.2037037037037035,0.05555555555555566,KNN,transmission_detail
+Automatic (AV-S1),10,0.8999999999999997,0.49999999999999967,KNN,transmission_detail
+Automatic (AV-S10),13,0.6666666666666676,0.05128205128205055,KNN,transmission_detail
+Automatic (AV-S6),41,1.7073170731707317,-0.45528455284552877,KNN,transmission_detail
+Automatic (AV-S7),31,0.9032258064516128,-0.2795698924731183,KNN,transmission_detail
+Automatic (AV-S8),32,0.9479166666666667,0.031249999999999778,KNN,transmission_detail
+Automatic (S10),106,0.8553459119496856,0.03144654088050328,KNN,transmission_detail
+Automatic (S5),3,0.0,0.0,KNN,transmission_detail
+Automatic (S6),221,0.7843137254901961,0.03921568627450973,KNN,transmission_detail
+Automatic (S7),32,0.45833333333333354,0.10416666666666669,KNN,transmission_detail
+Automatic (S8),461,1.0903832248734635,0.02313810556760668,KNN,transmission_detail
+Automatic (S9),43,0.9069767441860467,-0.10077519379844967,KNN,transmission_detail
+Automatic (variable gear ratios),97,1.2439862542955324,-0.05498281786941579,KNN,transmission_detail
+Automatic 10-spd,86,0.46124031007751926,-0.10465116279069765,KNN,transmission_detail
+Automatic 4-spd,3,0.3333333333333333,-0.3333333333333333,KNN,transmission_detail
+Automatic 5-spd,7,0.47619047619047655,0.0,KNN,transmission_detail
+Automatic 6-spd,89,0.5505617977528088,-0.19850187265917607,KNN,transmission_detail
+Automatic 7-spd,36,0.6296296296296295,-0.0185185185185186,KNN,transmission_detail
+Automatic 8-spd,164,0.5121951219512194,-0.01219512195121963,KNN,transmission_detail
+Automatic 9-spd,145,0.8551724137931033,-0.08735632183908029,KNN,transmission_detail
+Manual 5-spd,34,0.6666666666666665,1.0449157878825003e-16,KNN,transmission_detail
+Manual 6-spd,160,0.6708333333333333,-0.020833333333333336,KNN,transmission_detail
+Manual 7-spd,23,0.7681159420289851,0.2753623188405796,KNN,transmission_detail
+0,1839,0.7246710127498094,0.03577108523196147,Feedforward ANN,hybrid
+1,241,1.4214942742185475,-0.22973146873885666,Feedforward ANN,hybrid
+Compact Cars,228,0.9049512461612099,0.004951175890470806,Feedforward ANN,vehicle_class
+Large Cars,137,0.8059030936582245,0.14818457443348682,Feedforward ANN,vehicle_class
+Midsize Cars,277,1.0255224696135263,0.06971674963885696,Feedforward ANN,vehicle_class
+Midsize Station Wagons,18,0.5875409444173177,-0.34983740912543404,Feedforward ANN,vehicle_class
+Minicompact Cars,96,0.5323516925175985,0.07850627104441325,Feedforward ANN,vehicle_class
+Minivan - 2WD,7,0.43111555916922434,0.08316012791224889,Feedforward ANN,vehicle_class
+Minivan - 4WD,4,0.1621866226196289,-0.019835472106933594,Feedforward ANN,vehicle_class
+Small Pickup Trucks 2WD,16,0.5551782846450806,-0.08519589900970459,Feedforward ANN,vehicle_class
+Small Pickup Trucks 4WD,26,0.7346819364107572,0.07055326608511117,Feedforward ANN,vehicle_class
+Small Sport Utility Vehicle 2WD,123,0.8593376593861154,0.10178952100800305,Feedforward ANN,vehicle_class
+Small Sport Utility Vehicle 4WD,255,0.866242618186801,-0.05955679276410271,Feedforward ANN,vehicle_class
+Small Station Wagons,55,0.8597475572065874,-0.10184350447221235,Feedforward ANN,vehicle_class
+Special Purpose Vehicle 2WD,26,0.4880257753225473,0.09621726549588717,Feedforward ANN,vehicle_class
+Special Purpose Vehicle 4WD,7,0.40717084067208426,-0.012438501630510603,Feedforward ANN,vehicle_class
+Standard Pickup Trucks 2WD,54,0.6634614555924027,-0.10463921229044597,Feedforward ANN,vehicle_class
+Standard Pickup Trucks 4WD,93,0.7875479113671088,-0.07110198851554625,Feedforward ANN,vehicle_class
+Standard Sport Utility Vehicle 2WD,99,0.3606978426075945,0.0027569761179914378,Feedforward ANN,vehicle_class
+Standard Sport Utility Vehicle 4WD,232,0.843053123046612,-0.004346013069152832,Feedforward ANN,vehicle_class
+Subcompact Cars,183,0.8655786357942175,-0.09986831581657701,Feedforward ANN,vehicle_class
+Two Seaters,140,0.650764410836356,0.037689644949776786,Feedforward ANN,vehicle_class
+"Vans, Cargo Type",2,0.06818866729736328,-0.06818866729736328,Feedforward ANN,vehicle_class
+"Vans, Passenger Type",2,0.8420953750610352,-0.27488040924072266,Feedforward ANN,vehicle_class
+0.0,923,0.6879440092704665,-0.016292912988466406,Feedforward ANN,start_stop
+1.0,1157,0.8991165012765158,0.022001815439816066,Feedforward ANN,start_stop
+Automatic (AM-S6),23,1.1399483058763586,-0.1750214618185292,Feedforward ANN,transmission_detail
+Automatic (AM-S7),124,0.6490521200241581,-0.11112173911063902,Feedforward ANN,transmission_detail
+Automatic (AM-S8),34,0.5390851918388816,0.13005523120655732,Feedforward ANN,transmission_detail
+Automatic (AM-S9),1,0.23392105102539062,0.23392105102539062,Feedforward ANN,transmission_detail
+Automatic (AM6),10,1.2879552841186523,0.8832132339477539,Feedforward ANN,transmission_detail
+Automatic (AM7),33,0.7890596389770508,0.030237400170528526,Feedforward ANN,transmission_detail
+Automatic (AM8),18,0.6354394488864474,0.1195831298828125,Feedforward ANN,transmission_detail
+Automatic (AV-S1),10,0.7613447189331055,0.4275484085083008,Feedforward ANN,transmission_detail
+Automatic (AV-S10),13,0.5439516214224008,0.30559730529785156,Feedforward ANN,transmission_detail
+Automatic (AV-S6),41,1.7654772037413062,-0.6140039490490425,Feedforward ANN,transmission_detail
+Automatic (AV-S7),31,0.8323647899012412,-0.2733289041826802,Feedforward ANN,transmission_detail
+Automatic (AV-S8),32,0.6436609029769897,0.07824933528900146,Feedforward ANN,transmission_detail
+Automatic (S10),106,0.7757255536205364,0.14827808344139243,Feedforward ANN,transmission_detail
+Automatic (S5),3,0.0715649922688802,0.04242070515950521,Feedforward ANN,transmission_detail
+Automatic (S6),221,0.8366187341612389,0.1659231833203346,Feedforward ANN,transmission_detail
+Automatic (S7),32,0.42912212014198303,-0.10381534695625305,Feedforward ANN,transmission_detail
+Automatic (S8),461,0.9290306149232413,0.031248452606532164,Feedforward ANN,transmission_detail
+Automatic (S9),43,0.7779495771541152,-0.05114950135696766,Feedforward ANN,transmission_detail
+Automatic (variable gear ratios),97,1.457922296425731,-0.2609215765884242,Feedforward ANN,transmission_detail
+Automatic 10-spd,86,0.48702404110930686,-0.06624707510305006,Feedforward ANN,transmission_detail
+Automatic 4-spd,3,0.2491779327392578,-0.2491779327392578,Feedforward ANN,transmission_detail
+Automatic 5-spd,7,0.4821578434535435,-0.024950572422572544,Feedforward ANN,transmission_detail
+Automatic 6-spd,89,0.5717699500951874,-0.22944122485900192,Feedforward ANN,transmission_detail
+Automatic 7-spd,36,0.6683168146345351,0.3701601293351915,Feedforward ANN,transmission_detail
+Automatic 8-spd,164,0.5878618228726271,0.10804581642150879,Feedforward ANN,transmission_detail
+Automatic 9-spd,145,0.7767121676740976,-0.07790448418978987,Feedforward ANN,transmission_detail
+Manual 5-spd,34,0.5236506181604722,0.1544789145974552,Feedforward ANN,transmission_detail
+Manual 6-spd,160,0.7415221154689788,-0.030937069654464723,Feedforward ANN,transmission_detail
+Manual 7-spd,23,0.6741821454918903,0.23387121117633322,Feedforward ANN,transmission_detail

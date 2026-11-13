@@ -150,3 +150,13 @@ Best weights are deep-copied and saved as a state_dict following
 [PyTorch saving/loading guidance](https://docs.pytorch.org/tutorials/beginner/saving_loading_models.html).
 Scientific conclusions concern EPA ratings for this scoped dataset; missing
 weight/horsepower/hybrid-system detail and related variants limit transfer.
+
+## Subsequent feature study (2026-11-14)
+
+This original protocol and its completed artifacts remain the reference for the
+coarse-feature experiment. A separately declared validation-only ablation adds
+start-stop and detailed transmission using the identical raw snapshot and row
+IDs. Its protocol is `docs/feature_extension_protocol.json`, outputs are under
+`reports/results/endterm/feature_extension/`, and results are documented in
+`docs/feature_extension_results_ru.md`. It does not reopen holdout evaluation or
+claim a new independent test; do not mix its 72-input ANN with old test scores.

@@ -1,0 +1,76 @@
+variant,model,fold,mae
+original,Baseline (mean),1,4.532184258061303
+original,Baseline (mean),2,4.66506124152546
+original,Baseline (mean),3,4.698552081455482
+original,Baseline (mean),4,4.698785224345541
+original,Baseline (mean),5,4.582741042924565
+original,Linear Regression,1,1.9667467565608372
+original,Linear Regression,2,1.9593434529755955
+original,Linear Regression,3,2.038742508168519
+original,Linear Regression,4,1.9447289345445284
+original,Linear Regression,5,2.018629970532856
+original,Ridge,1,1.965877766729954
+original,Ridge,2,1.9598376736264769
+original,Ridge,3,2.039454417443637
+original,Ridge,4,1.9441600940528059
+original,Ridge,5,2.018472445611866
+original,Decision Tree,1,1.0805932144908723
+original,Decision Tree,2,1.0727638163896442
+original,Decision Tree,3,1.1092791592387048
+original,Decision Tree,4,1.07602643154095
+original,Decision Tree,5,1.1096914554568653
+original,KNN,1,1.0857094365241002
+original,KNN,2,1.099337748344371
+original,KNN,3,1.1389030395652908
+original,KNN,4,1.0845644421803362
+original,KNN,5,1.1601290541687892
+start_stop,Baseline (mean),1,4.532184258061303
+start_stop,Baseline (mean),2,4.66506124152546
+start_stop,Baseline (mean),3,4.698552081455482
+start_stop,Baseline (mean),4,4.698785224345541
+start_stop,Baseline (mean),5,4.582741042924565
+start_stop,Linear Regression,1,1.9261197701297796
+start_stop,Linear Regression,2,1.9147097255257715
+start_stop,Linear Regression,3,2.0053931377732996
+start_stop,Linear Regression,4,1.922518880712643
+start_stop,Linear Regression,5,1.984931183364283
+start_stop,Ridge,1,1.9257469346249734
+start_stop,Ridge,2,1.9153077108390868
+start_stop,Ridge,3,2.0062038545870227
+start_stop,Ridge,4,1.9221570196671425
+start_stop,Ridge,5,1.9850595968125009
+start_stop,Decision Tree,1,1.0057298282731073
+start_stop,Decision Tree,2,1.0234566757745565
+start_stop,Decision Tree,3,1.044141977623893
+start_stop,Decision Tree,4,1.010721557550391
+start_stop,Decision Tree,5,1.0472859623836521
+start_stop,KNN,1,1.0334351663272234
+start_stop,KNN,2,1.0602818814739343
+start_stop,KNN,3,1.074715571404313
+start_stop,KNN,4,1.0482255051791478
+start_stop,KNN,5,1.0742061470538293
+start_stop_transmission,Baseline (mean),1,4.532184258061303
+start_stop_transmission,Baseline (mean),2,4.66506124152546
+start_stop_transmission,Baseline (mean),3,4.698552081455482
+start_stop_transmission,Baseline (mean),4,4.698785224345541
+start_stop_transmission,Baseline (mean),5,4.582741042924565
+start_stop_transmission,Linear Regression,1,1.7209782004268814
+start_stop_transmission,Linear Regression,2,1.6811838003391253
+start_stop_transmission,Linear Regression,3,1.7581758490757797
+start_stop_transmission,Linear Regression,4,1.6881649560593004
+start_stop_transmission,Linear Regression,5,1.7391117369333604
+start_stop_transmission,Ridge,1,1.720568929658969
+start_stop_transmission,Ridge,2,1.6800450656713861
+start_stop_transmission,Ridge,3,1.7645818074682929
+start_stop_transmission,Ridge,4,1.6918083012058442
+start_stop_transmission,Ridge,5,1.7388839666090552
+start_stop_transmission,Decision Tree,1,0.8399203520512074
+start_stop_transmission,Decision Tree,2,0.8548176988574339
+start_stop_transmission,Decision Tree,3,0.8418813526429422
+start_stop_transmission,Decision Tree,4,0.8362150175064083
+start_stop_transmission,Decision Tree,5,0.8387981224073939
+start_stop_transmission,KNN,1,0.8521724372029871
+start_stop_transmission,KNN,2,0.8673798607573441
+start_stop_transmission,KNN,3,0.9018509084734249
+start_stop_transmission,KNN,4,0.8653421633554083
+start_stop_transmission,KNN,5,0.8886058753608421
