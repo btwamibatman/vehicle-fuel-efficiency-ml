@@ -34,9 +34,8 @@ def search(train):
 
 def run():
     import matplotlib.pyplot as plt
-    from .neural_network import dataset_manifest, verify_manifest
-    df = load_dataset(); splits = make_splits(df); manifest = dataset_manifest(df, splits)
-    verify_manifest(json.loads((RESULTS / 'ann_dataset_manifest.json').read_text()), manifest)
+    from .endterm_data import verified_splits
+    splits, manifest = verified_splits()
     train = splits['train']; RESULTS.mkdir(parents=True, exist_ok=True); FIGURES.mkdir(parents=True, exist_ok=True)
     scores = search(train); scores.to_csv(RESULTS / 'clustering_search.csv', index=False)
     # Three groups offer a compact interpretable partition; see notebook for evidence.
