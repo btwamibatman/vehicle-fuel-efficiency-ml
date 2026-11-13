@@ -1,0 +1,5 @@
+# Endterm experiments: clustering and supervised models
+
+Before running: K-Means uses only cylinders and displacement. Compare k=2–8 by inertia, a seed-42 sample silhouette, cluster sizes and interpretability; k=3 is a compact candidate to be assessed against those diagnostics. The groups describe engine characteristics, not complete vehicle types. MPG is excluded from fitting and k selection.
+
+For classical refinement, the inherited unrestricted tree may overfit, so compare nearby depths and leaf sizes; three-neighbor KNN may benefit from neighboring k and distance weighting; Ridge may reduce coefficient instability compared with ordinary least squares. The declared grids are tree depth [12, 16, None], leaf [1, 2, 5]; KNN neighbors [2, 3, 4, 5], weights [uniform, distance], distance p [1, 2]; Ridge alpha [0.01, 0.1, 1, 10], plus the original linear model. All use the same training-only duplicate-grouped five folds. Model choice uses validation MAE. The historical test was used in the midterm and is not an untouched endterm holdout.
