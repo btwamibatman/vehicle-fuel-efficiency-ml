@@ -6,9 +6,9 @@ EPA snapshot and seed-42 duplicate-grouped split in `docs/endterm_protocol.md`.
 
 | Member | Responsibility | Status on 2026-11-13 | Required handoff |
 |---|---|---|---|
-| Aktore | Training-only PCA of `cylinders` and `displacement`; final notebook, documentation and deck | PCA complete; integration in progress | `pca_*.csv`, figures, PCA module/notebook |
+| Aktore | Training-only PCA of `cylinders` and `displacement`; final notebook, documentation and deck | PCA and report integrated; deck still to prepare | `pca_*.csv`, figures, PCA module/notebook |
 | Khamza | Shared protocol and reproducibility; feedforward ANN | Complete and merged | `ann_*` bundle, validation predictions, curves |
-| Askhat | K-Means, classical-model refinement, validated comparison and error analysis | Complete in `askhat/endterm-clustering-evaluation` | `clustering_*`, `model_comparison_*`, `validation_predictions.csv`, error-analysis tables/figures |
+| Askhat | K-Means, classical-model refinement, validated comparison and error analysis | Complete and merged | `clustering_*`, `model_comparison_*`, `validation_predictions.csv`, error-analysis tables/figures |
 
 ## Integration gate
 
@@ -17,9 +17,9 @@ committed artifacts. The cluster overlay is
 `reports/figures/endterm/pca_clusters_train.png`. Final slides and prose must
 continue to use the committed artifacts rather than historical midterm values.
 
-Before integrating, Askhat must verify the raw snapshot and split against
+For any future reproduction, verify the raw snapshot and split against
 `ann_dataset_manifest.json`, use unique `row_id` values, and provide the
-assignment file with exactly the 9,816 training IDs. Aktore's PCA command then
+assignment file with exactly the 9,816 training IDs. The PCA command then
 creates the overlay with:
 
 ```powershell

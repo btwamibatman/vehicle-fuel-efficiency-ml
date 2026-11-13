@@ -34,7 +34,7 @@ EPA defines `comb08` as combined MPG for the primary fuel and `displ` as displac
 
 ## Data-quality findings for preprocessing
 
-These findings are from `load_split("train")` on the 2026-10-08 download (seed 42), and are reproduced by `notebooks/01_eda.ipynb`.
+These findings are from `load_split("train")` on the 2026-10-08 download (seed 42), and are reproduced by `notebooks/endterm/00_eda.ipynb`.
 
 - All 14 project columns have the expected numeric/string type; no used-column values are missing in the training split.
 - There are no exact duplicate rows once `row_id` is included. There are **325** duplicate vehicle records after omitting `row_id`; exact duplicate project records are grouped before splitting, so they do not cross partitions.

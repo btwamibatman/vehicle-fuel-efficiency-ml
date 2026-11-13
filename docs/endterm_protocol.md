@@ -100,7 +100,12 @@ introduced here. This module intentionally has no `--test` option.
 
 ## Artifact and integration contract
 
-- Preserve `notebooks/mid/`, `reports/figures/mid/` and old top-level result files.
+- The initial experiment preserved the midterm notebooks and figures. During final
+  presentation cleanup, the obsolete midterm report/plan and two old evaluation
+  figures were removed from the working tree; their originals remain in Git.
+  Required EDA now lives in `notebooks/endterm/00_eda.ipynb` and its four figures
+  in `reports/figures/endterm/`. Historical top-level result files remain for
+  provenance; final comparisons read `reports/results/endterm/`.
 - New notebook: `notebooks/endterm/03_ann.ipynb`.
 - New tables/metadata/bundle: `reports/results/endterm/ann_*`.
 - New plots: `reports/figures/endterm/ann_*`.

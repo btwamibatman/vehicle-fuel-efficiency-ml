@@ -4,7 +4,7 @@
 
 - Everyone commits **from their own GitHub account** (`git config user.name` / `user.email` set to yourself). Never commit on a teammate's behalf or reuse their identity.
 - Never commit directly to `main`. One feature, one branch, one pull request.
-- Edit only files you own (see [docs/team_tasks.md](docs/team_tasks.md)). If you need a change in someone else's file, ask them or open a small PR they review.
+- Edit only files you own (see [docs/endterm_team_tasks.md](docs/endterm_team_tasks.md)). If you need a change in someone else's file, ask them or open a small PR they review.
 
 ## Workflow
 

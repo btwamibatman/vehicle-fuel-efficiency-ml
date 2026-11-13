@@ -1,5 +1,11 @@
 # Khamza's endterm ANN - results, reproduction and team handoff
 
+> Historical ANN development/handoff record. The completed endterm
+> comparison, current notebook paths and defense entry point are in README
+> and `notebooks/endterm/project.ipynb`. Statements below about pending
+> integration or preserved midterm files describe the earlier stage.
+
+
 ## Delivered scope
 
 A train/validation-only PyTorch CPU feedforward regressor, four-candidate

@@ -7,9 +7,9 @@
 - [x] PCA artifacts include variance, loadings, coordinates, configuration and two figures.
 - [x] PCA source tests verify component output, train-only fitting and strict cluster joins.
 - [x] ANN handoff is present with its validation metrics and reproducibility metadata.
-- [x] Full project test suite passed: 34 tests with PyTorch 2.15.0+cpu on Python 3.12.
+- [x] Full project test suite passed: 38 tests with PyTorch 2.15.0+cpu on Python 3.12.
 
-## Required from Askhat before final submission
+## Integrated clustering and evaluation
 
 - [x] `clustering_assignments_train.csv` with unique train `row_id,cluster` pairs.
 - [x] `clustering_search.csv`, profiles, configuration and labelled clustering figures.
@@ -17,10 +17,10 @@
 - [x] Unified validation predictions and error-analysis outputs for ANN and the selected classical model.
 - [x] Final fixed-model test table, explicitly labelled as the previously used midterm holdout.
 
-## Final assembly after those files arrive
+## Final assembly and remaining defense preparation
 
 - [x] Generate the PCA/K-Means overlay with an exact row-ID match.
-- [ ] Complete `notebooks/endterm/project.ipynb` without rerunning selection on test data.
-- [ ] Replace all pending markers in README and the presentation with verified artifact values.
-- [ ] Run the complete test suite in the documented environment and execute notebooks from a fresh kernel.
+- [x] Complete `notebooks/endterm/project.ipynb` with training EDA, preparation, methods, frozen comparisons and limitations.
+- [x] Update README and presentation outline to the completed endterm artifacts.
+- [x] Run 38 tests and all six endterm notebooks from fresh kernels; reproduce ANN validation metrics within 1e-10 in an isolated copy without replacing official model artifacts.
 - [ ] Visually inspect the 10–15 slide deck and verify every metric's split and units.

@@ -1,5 +1,11 @@
 # Add reproducible CPU ANN for endterm MPG regression
 
+> Historical ANN development/handoff record. The completed endterm
+> comparison, current notebook paths and defense entry point are in README
+> and `notebooks/endterm/project.ipynb`. Statements below about pending
+> integration or preserved midterm files describe the earlier stage.
+
+
 The endterm project needs a tabular ANN alongside the existing supervised
 models. Add a train/validation-only PyTorch CPU workflow with the shared
 preprocessing and original seed-42 split, a four-configuration search, early

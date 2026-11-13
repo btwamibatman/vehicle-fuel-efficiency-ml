@@ -1,215 +1,157 @@
-# Vehicle Fuel Efficiency Prediction
+# Vehicle Fuel Efficiency Prediction - Endterm
 
-## Endterm status
+Predict EPA combined **US MPG** from vehicle specifications. This is supervised
+regression: MAE in MPG is the primary metric; RMSE and R-squared are secondary.
+Higher MPG means greater fuel efficiency.
 
-The repository contains verified endterm ANN and PCA work using the same
-SHA-256-identified dataset snapshot and seed-42 split. The historical
-Decision-Tree figures below remain midterm context, not an endterm comparison.
+The endterm continues the midterm dataset and regression pipeline, adding
+**K-Means, PCA, a PyTorch feedforward ANN, refined classical tuning and a unified
+six-model comparison**. The shared data and preprocessing remain the foundation.
 
-| Endterm component | Verified result | Artifact |
+## Start here
+
+Open [`notebooks/endterm/project.ipynb`](notebooks/endterm/project.ipynb) for the
+integrated defense report. It shows training-only data checks and EDA, then reads
+the saved tuning, clustering, PCA, ANN and evaluation artifacts without retraining
+or evaluating the holdout again.
+
+| Notebook | Purpose | Execution behavior |
 |---|---|---|
-| Feedforward ANN | Validation MAE **1.082715 MPG**, RMSE 1.522971 MPG, R² 0.939596 | `reports/results/endterm/ann_metrics.json` |
-| Engine PCA | PC1 retains **96.06%** of training variance in cylinders and displacement | `reports/results/endterm/pca_variance.csv` |
-| K-Means | `k=3`; engine groups centre near 4-cylinder/2.04 L, 6-cylinder/3.30 L and 8.46-cylinder/5.22 L | `reports/results/endterm/clustering_profiles.csv` |
-| Unified validation winner | Decision Tree, MAE **1.051024 MPG** | `reports/results/endterm/model_comparison_validation.csv` |
+| `00_eda.ipynb` | Data audit and four interpreted EDA plots | Uses train only; refreshes EDA figures |
+| `01_clustering.ipynb` | K-Means search and engine profiles | Reads saved results and figures |
+| `02_pca.ipynb` | Train-only PCA and strict cluster overlay join | Recomputes PCA in memory and checks saved results |
+| `03_ann.ipynb` | Full ANN implementation walkthrough and training history | Retrains the same four declared candidates and refreshes ANN artifacts |
+| `04_evaluation.ipynb` | Six-model comparison and error analysis | Reads saved results and figures |
+| `project.ipynb` | Complete report for the defense | Reads final results and audits training data |
 
-The 2,079-row test partition was already used in midterm. It must not be
-described as a new untouched endterm test and must not guide any further model
-selection. See [`docs/endterm_protocol.md`](docs/endterm_protocol.md) for the
-fixed data and evaluation contract.
+The report is the presentation entry point. The numbered notebooks explain the
+individual methods; they are not six competing final reports.
 
-### Endterm execution order
+## Final results
+
+Validation uses the same 2,080 rows for every model. Classical models use grouped
+five-fold CV within train. The ANN uses validation for early stopping and its
+four-candidate selection; it has no claimed CV score. The winner is chosen by
+validation MAE, with different tuning procedures explicitly acknowledged.
+
+| Model | Validation MAE | Validation RMSE | Validation R-squared |
+|---|---:|---:|---:|
+| **Decision Tree** | **1.051024** | 1.636483 | 0.930256 |
+| Feedforward ANN | 1.082715 | **1.522971** | **0.939596** |
+| KNN | 1.089423 | 1.672234 | 0.927176 |
+| Linear Regression | 2.018650 | 2.777868 | 0.799041 |
+| Ridge | 2.020508 | 2.778423 | 0.798961 |
+| Baseline (mean) | 4.661760 | 6.196671 | approximately 0 |
+
+MAE and RMSE are in US MPG. Source:
+[`model_comparison_validation.csv`](reports/results/endterm/model_comparison_validation.csv).
+The tree uses `max_depth=None, min_samples_leaf=2`; KNN uses three neighbors,
+Manhattan distance and uniform weights. Ridge selected `alpha=1.0`.
+The ANN uses 40 encoded inputs, hidden layers 64 and 32 with ReLU, one linear
+output, Adam at 0.001, batch size 64 and MSE on a train-standardized target.
+Early stopping restored epoch 113 after stopping at epoch 133.
+
+The 2,079-row holdout **was already used in midterm**. The final endterm table
+records the fixed configurations on that previously used holdout; it is not a
+new independent test and must not drive another model selection. Tree MAE is
+1.073831 and ANN MAE is 1.078018 MPG. Full results:
+[`model_comparison_test.csv`](reports/results/endterm/model_comparison_test.csv).
+
+| Additional analysis | Finding |
+|---|---|
+| K-Means | `k=3`; centers near 4 cylinders / 2.04 L, 6 / 3.30 L and 8.46 / 5.22 L |
+| PCA | PC1 retains 96.06% of variance in standardized cylinders and displacement |
+| Validation error analysis | Tree MAE is 1.827 MPG for 241 hybrids versus 0.949 for 1,839 non-hybrids |
+
+K-Means and PCA describe engine structure, not a replacement MPG predictor.
+MPG was not used to fit or choose clusters. PCA variance is feature variance,
+not prediction accuracy; retaining both components of two inputs is a rotation.
+
+![Validation diagnostics](reports/figures/endterm/evaluation_validation.png)
+
+## Dataset and evaluation protocol
+
+Source: [U.S. EPA / DOE FuelEconomy.gov](https://www.fueleconomy.gov/feg/ws/index.shtml).
+The real `vehicles.csv` snapshot is scoped to model years **2015+**, excluding
+EV, fuel-cell, plug-in-hybrid and specified non-comparable fuel entries.
+Ordinary non-plug-in hybrids remain included.
+
+- Prepared dataset: **13,975 rows, 14 columns**, including identifiers and target.
+- Fixed seed-42 split: **9,816 train / 2,080 validation / 2,079 prior holdout**.
+- Target: `mpg`, from EPA `comb08`; make/model and row ID are not predictors.
+- Inputs: year, cylinders, displacement, technology flags, drive, transmission,
+  vehicle class and fuel type, plus inherited `displacement_per_cylinder`.
+- Exact duplicate records stay together across splits and training CV folds.
+  Related make/model variants can still cross partitions.
+- Imputation, scaling and encoding fit only on training data (inside each CV
+  fold for classical tuning). The ANN target scaler also fits on train only.
+- Snapshot SHA-256:
+  `b1ff0e3071c46cdc1c99e0015878b98a01851462d7e447237ce2fc1294ccf303`.
+
+See [`data/README.md`](data/README.md) for source, schema, cleaning and usage
+terms, and [`docs/endterm_protocol.md`](docs/endterm_protocol.md) for the fixed
+snapshot/split contract and evaluation limitations.
+
+## Environment and execution
+
+The tested CPU environment uses Python 3.12. Exact library versions are pinned
+in [`requirements-endterm.txt`](requirements-endterm.txt), including PyTorch
+2.15.0+cpu, scikit-learn 1.9.1, pandas 3.0.6 and NumPy 2.5.3.
+
+From the project root in PowerShell, use the existing environment:
 
 ```powershell
-# Requires the existing data/raw/vehicles.csv with the protocol hash.
-py -3.12 -m pytest
-py -3.12 -m vehicle_efficiency.dimensionality_reduction
-jupyter nbconvert --to notebook --execute notebooks/endterm/02_pca.ipynb --output 02_pca.executed.ipynb
-jupyter nbconvert --to notebook --execute notebooks/endterm/03_ann.ipynb --output 03_ann.executed.ipynb
+.\.venv\Scripts\python.exe -m pytest -q
+.\.venv\Scripts\python.exe -m vehicle_efficiency.neural_network --verify
+.\.venv\Scripts\python.exe -m jupyter lab notebooks/endterm/project.ipynb
 ```
 
-The committed clustering assignments produce the PCA overlay with:
+To set up another Python 3.12 environment:
 
 ```powershell
-py -3.12 -m vehicle_efficiency.dimensionality_reduction --overlay reports/results/endterm/clustering_assignments_train.csv
+py -3.12 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements-endterm.txt
+.\.venv\Scripts\python.exe -m pip install -e . --no-deps
 ```
 
-Predicting the EPA combined fuel efficiency (MPG) of recent vehicles from their specifications. This is a supervised regression project built on public FuelEconomy.gov data.
+Obtain the team's existing `data/raw/vehicles.csv` and verify it with the ANN
+`--verify` command. Downloading today's EPA file may change its hash and invalidate
+comparison; do not replace the snapshot or reference manifest for the defense.
+No download is needed on the current machine.
 
-**Result:** the tuned Decision Tree predicts combined MPG on the held-out test set with **MAE 1.04 MPG** (RMSE 1.67, R² 0.93). That is about 4.5× better than predicting the mean (validation MAE 4.66).
+The numbered notebooks run independently from their first cell in the same
+environment. For a full walkthrough use 00, 01, 02, 03, 04, then project.
+Notebook 03 reruns the fixed experiment; use project for a presentation without
+retraining. The saved comparison already includes final evaluation.
+`vehicle_efficiency.endterm_compare` intentionally refuses new selection once
+the final holdout table exists. Keep that safeguard and the recorded results.
+Source implementations live in `src/vehicle_efficiency/`; historical top-level
+result tables are retained for provenance and are not the endterm comparison.
 
-## Project question
+## Contributions
 
-Can we predict the EPA combined fuel efficiency of a recent vehicle from its specifications?
-
-- **Target:** `comb08`, EPA combined US miles per gallon. Higher means more efficient.
-- **Task:** supervised regression.
-- **Primary metric:** mean absolute error (MAE) in MPG. An MAE of 2 means predictions are off by 2 MPG on average.
-- **Secondary metrics:** RMSE (MPG) and R² (unitless).
-
-## Results
-
-All models use the same seed-42 split and the same preprocessing pipeline, including the engineered `displacement_per_cylinder` feature. Hyperparameters were tuned with 5-fold grouped cross-validation on the training split only. The final model was selected by validation MAE.
-
-### Validation comparison (n = 2,080)
-
-| Model | Tuned hyperparameters | CV MAE (train, 5-fold) | Val MAE | Val RMSE | Val R² |
-|---|---|---|---|---|---|
-| **Decision Tree** | `max_depth=None`, `min_samples_leaf=1` | 1.090 ± 0.024 | **1.059** | 1.691 | 0.926 |
-| KNN | `n_neighbors=3`, `p=1`, `weights=uniform` | 1.112 ± 0.033 | 1.093 | 1.665 | 0.928 |
-| Linear Regression | – | 1.986 ± 0.036 | 2.019 | 2.778 | 0.799 |
-| Baseline (mean) | – | 4.635 ± 0.067 | 4.662 | 6.197 | 0.000 |
-
-Search spaces: Decision Tree, 24 candidates (`max_depth` ∈ {4, 6, 8, 10, 12, None} × `min_samples_leaf` ∈ {1, 5, 10, 20}); KNN, 20 candidates (`n_neighbors` ∈ {3, 5, 10, 15, 25} × `weights` × `p` ∈ {1, 2}). Full grids are in [`reports/results/decision_tree_tuning.csv`](reports/results/decision_tree_tuning.csv) and [`reports/results/knn_tuning.csv`](reports/results/knn_tuning.csv).
-
-### Final test evaluation (n = 2,079)
-
-| Model | Test MAE | Test RMSE | Test R² |
-|---|---|---|---|
-| Decision Tree | **1.038** | 1.668 | 0.928 |
-
-The test split was evaluated **once**, after the model choice was fixed ([`reports/results/final_test.json`](reports/results/final_test.json)). The test score matches validation (1.04 vs 1.06 MPG), so the model generalises to unseen vehicles.
-
-### Error analysis
-
-| Actual vs predicted (validation) | Residuals (validation) |
-|---|---|
-| ![Actual vs predicted](reports/figures/mid/actual_vs_predicted_validation.png) | ![Residuals](reports/figures/mid/residuals_validation.png) |
-
-Historical error tables are saved under `reports/results/`; the endterm comparison and error analysis are under `reports/results/endterm/`. The integrated report is [`notebooks/endterm/project.ipynb`](notebooks/endterm/project.ipynb).
-
-## Dataset
-
-The data is the public U.S. EPA/DOE FuelEconomy.gov file `vehicles.csv`, restricted to model years 2015+ and to vehicles with comparable MPG ratings.
-
-| | Rows | Columns |
+| Member | Endterm contribution | Implementation commits |
 |---|---|---|
-| Raw download (2026-10-08) | 50,407 | 84 |
-| Project subset | 13,975 | 14 |
-| Train / validation / test | 9,816 / 2,080 / 2,079 | – |
+| Aktore | PCA, cluster overlay, report integration and documentation | `2489abc`, `31097f4`, `c36ca09` |
+| Khamza | Feedforward ANN, fixed experiment protocol, reproducibility and walkthrough | `eba318f`, `a0bf7a9` |
+| Askhat | K-Means, classical refinement, comparison and error analysis | `316c517`, `34fed77`, `47b4919`, `b455bad` |
 
-Core features: model year, cylinder count, engine displacement (litres), drive, vehicle class, fuel type and transmission. This source has no weight or horsepower, so the project uses displacement and model year instead and does not pretend those features exist.
+Shared midterm work includes data loading, cleaning, preprocessing, feature
+engineering, EDA and the original supervised models. See
+[`team tasks`](docs/endterm_team_tasks.md),
+[`presentation outline`](docs/endterm_presentation_outline.md) and
+[`submission checklist`](docs/endterm_submission_checklist.md).
 
-Source URL, public-domain terms, filtering rules, schema, data-quality checks and limitations are documented in [`data/README.md`](data/README.md).
+## Limitations and next research
 
-### EDA highlights
+The selected data has no vehicle weight, horsepower, aerodynamics or real-world
+driving conditions. EPA laboratory ratings do not guarantee a driver's fuel use.
+Results do not cover pre-2015 or excluded powertrains. One snapshot/seed,
+validation-based selection, related variants across partitions and prior holdout
+use limit generalization claims. Treat small group results cautiously; do not
+present group differences as causal or use predictions as certified fuel ratings.
 
-| Target distribution | MPG by model year |
-|---|---|
-| ![Target distribution](reports/figures/mid/eda_target_distribution.png) | ![MPG by model year](reports/figures/mid/eda_mpg_by_model_year.png) |
-| **MPG by cylinders** | **Displacement vs MPG** |
-| ![MPG by cylinders](reports/figures/mid/eda_mpg_by_cylinders.png) | ![Displacement vs MPG](reports/figures/mid/eda_displacement_vs_mpg.png) |
-
-The EDA uses the training split only. See [`notebooks/mid/01_eda.ipynb`](notebooks/mid/01_eda.ipynb).
-
-## Methodology and reproducibility
-
-- **One shared split.** Seed 42 gives roughly 70/15/15 train/validation/test. EDA and feature decisions use only the training split.
-- **No duplicate leakage.** Exact duplicate records are grouped before splitting and kept in the same fold during CV (`GroupKFold`).
-- **No preprocessing leakage.** Imputation, scaling and encoding are fitted inside scikit-learn `Pipeline`s, so only training data is used for fitting.
-- **Clean model selection.** Tuning uses CV on the training split, selection uses validation, and the test set is used once at the end.
-
-## Quick start
-
-Requires Python 3.10+. Verified with Python 3.12.
-
-```bash
-python3.12 -m venv .venv
-source .venv/bin/activate              # Windows: .\.venv\Scripts\Activate.ps1
-python -m pip install -e ".[dev]"
-
-python -m vehicle_efficiency.data download   # fetch vehicles.csv into data/raw/ (--force to re-download)
-python -m pytest                             # 18 tests
-```
-
-### Reproduce the results
-
-```bash
-# Train one model on train, report validation metrics (optionally with 5-fold CV)
-python -m vehicle_efficiency.train --model linear_regression --cv --engineered
-python -m vehicle_efficiency.train --model decision_tree --cv
-python -m vehicle_efficiency.train --model knn --cv
-
-# Tune Decision Tree and KNN, compare all models on validation, write tables and figures
-python -m vehicle_efficiency.compare
-
-# Execute the notebooks
-jupyter nbconvert --to notebook --execute notebooks/mid/01_eda.ipynb --output 01_eda.executed.ipynb
-jupyter lab notebooks/endterm/project.ipynb
-```
-
-> `python -m vehicle_efficiency.compare --test` performs the single final test evaluation. It has already been run, and the result is in `reports/results/final_test.json`. Do not rerun it to choose or adjust a model.
-
-## Repository layout
-
-```text
-src/vehicle_efficiency/
-  data.py             download, filtering, cleaning, duplicate grouping, seed-42 split
-  preprocessing.py    feature/target split, engineered features, column transformers
-  models.py           baseline, linear regression, decision tree and KNN pipelines + grids
-  evaluation.py       metrics, grouped CV, tuning, comparison tables, error analysis, plots
-  train.py            CLI: train/validate a single model
-  compare.py          CLI: tune, compare, analyse errors, final test (--test)
-tests/                data and pipeline tests (pytest)
-notebooks/
-  01_eda.ipynb        training-only EDA
-  project.ipynb       integrated final report notebook
-data/README.md        dataset source, terms, schema and limitations
-reports/figures/      EDA and evaluation figures
-reports/results/      saved metrics, tuning grids and comparison tables
-docs/                 team tasks, presentation outline, final-stage plan
-```
-
-## Team
-
-| Member | Responsibility |
-|---|---|
-| Aktore | Problem and dataset documentation, EDA, README, presentation outline, final-stage plan |
-| Khamza | Shared data loading/split, cleaning, preprocessing, feature engineering, baseline and linear regression |
-| Askhat | Decision Tree and KNN, cross-validation, tuning, model comparison, error analysis, final test evaluation |
-
-Task ownership is detailed in [`docs/endterm_team_tasks.md`](docs/endterm_team_tasks.md). The defense plan is in [`docs/endterm_presentation_outline.md`](docs/endterm_presentation_outline.md). See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the workflow.
-
-## Limitations
-
-- No vehicle weight, horsepower or aerodynamics in the source data. These are major MPG drivers.
-- Only model years 2015+ are covered, so predictions for older vehicles are out of scope.
-- EPA ratings are lab-test values and can differ from real-world fuel economy.
-
-Khamza files: data.py, preprocessing, models, tests, pyprojects.
-
-Pipeline:
-[1. data.py] ───────► [2. preprocessing.py] ───────► [3. models.py] ───────► [4. train.py / compare.py] 
-(Сырые данные,           (Инженерия признаков,        (Сборка в Pipeline:        (Обучение, подбор тюнинга,
-   очистка, деление)        масштабирование, OHE)        препроцессинг + модель)    сравнение и финальный тест)
-
-Метрики:
-GroupShuffleSplit - чтобы одна и та же машина не попала одновременно в обучение и тест.
-
-MAE (средняя абсолютная ошибка): на сколько миль на галлон модель в среднем ошибается. У Decision Tree 1.059 MPG, то есть примерно на 1 MPG. Чем меньше, тем лучше.
-RMSE: похожа на MAE, но сильнее штрафует большие ошибки. Если RMSE намного больше MAE, значит, есть отдельные сильные промахи.
-R2: доля разброса MPG, которую модель объясняет. 1.0 идеально, 0 то же, что просто предсказывать среднее. У Decision Tree 0.926, то есть 92.6%.
-
-
-
-Running commands:
-
-cleaning, leakage controls, feature engineering (displacement_per_cylinder), baseline and linear regression:
-
-Khamza Contributuin:
-python -m vehicle_efficiency.train --model linear_regression --cv --engineered
-
-
-Full Project pipeline:
-python -m vehicle_efficiency.compare
-
-Run tests:
-powershell
-python -m pytest
-
-Train a model:
-powershell
-python -m vehicle_efficiency.train --model decision_tree --cv
-
-Launch Jupyter lab
-jupyter lab notebooks/endterm/project.ipynb
+Keep the same dataset for the endterm comparison. A future, separate robustness
+study could predeclare make/model-grouped or time-based evaluation, or join
+verified weight/horsepower data. Such a study requires fresh evaluation and
+must be reported separately from these frozen results.
