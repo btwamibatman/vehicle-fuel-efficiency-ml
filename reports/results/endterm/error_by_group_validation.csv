@@ -1,0 +1,49 @@
+model,group_type,group,n,mae,mean_error
+Decision Tree,hybrid,0,1839,0.9493191008388054,-0.006826227110420448
+Decision Tree,hybrid,1,241,1.8271043272080616,0.06830171902786016
+Decision Tree,vehicle_class,Compact Cars,228,1.3518309663046506,0.049164578111946654
+Decision Tree,vehicle_class,Large Cars,137,0.8982968369829684,0.021167883211678742
+Decision Tree,vehicle_class,Midsize Cars,277,1.363533608389204,0.013888367949739784
+Decision Tree,vehicle_class,Midsize Station Wagons,18,1.6703703703703707,0.8185185185185188
+Decision Tree,vehicle_class,Minicompact Cars,96,0.4683201058201057,0.020568783068783143
+Decision Tree,vehicle_class,Minivan - 2WD,7,0.4047619047619046,0.26190476190476175
+Decision Tree,vehicle_class,Minivan - 4WD,4,1.0,-1.0
+Decision Tree,vehicle_class,Small Pickup Trucks 2WD,16,0.875,-0.09375
+Decision Tree,vehicle_class,Small Pickup Trucks 4WD,26,0.6673076923076923,0.14166666666666666
+Decision Tree,vehicle_class,Small Sport Utility Vehicle 2WD,123,1.342506229091595,0.009312864190912916
+Decision Tree,vehicle_class,Small Sport Utility Vehicle 4WD,255,1.187194665213241,-0.08697873620474243
+Decision Tree,vehicle_class,Small Station Wagons,55,1.153030303030303,-0.07424242424242422
+Decision Tree,vehicle_class,Special Purpose Vehicle 2WD,26,0.8724358974358974,0.333974358974359
+Decision Tree,vehicle_class,Special Purpose Vehicle 4WD,7,0.2857142857142855,0.2857142857142855
+Decision Tree,vehicle_class,Standard Pickup Trucks 2WD,54,0.5873015873015873,-0.12134038800705464
+Decision Tree,vehicle_class,Standard Pickup Trucks 4WD,93,0.9095408772828129,0.05616999487967229
+Decision Tree,vehicle_class,Standard Sport Utility Vehicle 2WD,99,0.4892255892255893,0.11414141414141411
+Decision Tree,vehicle_class,Standard Sport Utility Vehicle 4WD,232,0.9481988916256158,0.020735837438423735
+Decision Tree,vehicle_class,Subcompact Cars,183,1.015983606557377,-0.102959927140255
+Decision Tree,vehicle_class,Two Seaters,140,0.9523809523809522,-0.11628787878787869
+Decision Tree,vehicle_class,"Vans, Cargo Type",2,0.0,0.0
+Decision Tree,vehicle_class,"Vans, Passenger Type",2,2.0,2.0
+Feedforward ANN,hybrid,0,1839,1.0060996335119317,-0.027096459501265442
+Feedforward ANN,hybrid,1,241,1.667343179219986,0.17593671078503872
+Feedforward ANN,vehicle_class,Compact Cars,228,1.3042429581023098,0.026720787349500154
+Feedforward ANN,vehicle_class,Large Cars,137,1.0364236205163664,0.19849415243107038
+Feedforward ANN,vehicle_class,Midsize Cars,277,1.3534727888417157,-0.08030588446111026
+Feedforward ANN,vehicle_class,Midsize Station Wagons,18,0.7658092710706923,0.024135907491048176
+Feedforward ANN,vehicle_class,Minicompact Cars,96,0.6726122697194418,0.18952274322509766
+Feedforward ANN,vehicle_class,Minivan - 2WD,7,0.7352343967982701,0.4324558803013393
+Feedforward ANN,vehicle_class,Minivan - 4WD,4,0.20847463607788086,0.20847463607788086
+Feedforward ANN,vehicle_class,Small Pickup Trucks 2WD,16,0.7838785648345947,0.14687800407409668
+Feedforward ANN,vehicle_class,Small Pickup Trucks 4WD,26,0.7122908372145432,0.0944212399996244
+Feedforward ANN,vehicle_class,Small Sport Utility Vehicle 2WD,123,1.4628452828259972,0.1024091767101753
+Feedforward ANN,vehicle_class,Small Sport Utility Vehicle 4WD,255,1.1391974131266276,-0.21600034377154181
+Feedforward ANN,vehicle_class,Small Station Wagons,55,1.3242949745871804,0.07859864668412642
+Feedforward ANN,vehicle_class,Special Purpose Vehicle 2WD,26,0.6324687004089355,0.19359276844904974
+Feedforward ANN,vehicle_class,Special Purpose Vehicle 4WD,7,0.49921866825648714,0.20007664816720144
+Feedforward ANN,vehicle_class,Standard Pickup Trucks 2WD,54,0.7757256119339554,-0.08655590481228298
+Feedforward ANN,vehicle_class,Standard Pickup Trucks 4WD,93,0.8636833108881469,-0.14727643741074428
+Feedforward ANN,vehicle_class,Standard Sport Utility Vehicle 2WD,99,0.5938608766806246,0.18064200276076192
+Feedforward ANN,vehicle_class,Standard Sport Utility Vehicle 4WD,232,1.0137486951104526,0.03216346378984122
+Feedforward ANN,vehicle_class,Subcompact Cars,183,1.0567433247800733,-0.26303472154127444
+Feedforward ANN,vehicle_class,Two Seaters,140,1.0605798721313477,0.18576274599347795
+Feedforward ANN,vehicle_class,"Vans, Cargo Type",2,0.35537242889404297,0.35537242889404297
+Feedforward ANN,vehicle_class,"Vans, Passenger Type",2,0.20508766174316406,0.20214271545410156

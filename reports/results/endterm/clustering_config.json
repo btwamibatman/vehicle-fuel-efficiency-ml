@@ -1,0 +1,16 @@
+{
+  "features": [
+    "cylinders",
+    "displacement"
+  ],
+  "target_used_in_fit_or_selection": false,
+  "imputation": "median",
+  "scaling": "StandardScaler",
+  "k": 3,
+  "seed": 42,
+  "n_init": 20,
+  "silhouette_sample_size": 3000,
+  "dataset_sha256": "b1ff0e3071c46cdc1c99e0015878b98a01851462d7e447237ce2fc1294ccf303",
+  "split_assignments_sha256": "3104489e6deddeb5cad770545d0fd8192bb432428a0039494705ef136eca01c7",
+  "split": "train"
+}
