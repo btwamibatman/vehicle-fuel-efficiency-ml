@@ -92,7 +92,7 @@ def build_variant_pipeline(name: str, variant: str, parameters: dict):
 def protected_hashes() -> dict:
     """Fingerprint the completed parent experiment and raw bytes before/after."""
     paths = [RAW_FILE, *[p for p in PARENT.iterdir() if p.is_file()]]
-    return {str(p.relative_to(PROJECT_ROOT)): file_sha256(p) for p in paths}
+    return {p.relative_to(PROJECT_ROOT).as_posix(): file_sha256(p) for p in paths}
 
 
 def _write_json(path: Path, value: dict) -> None:
@@ -237,7 +237,7 @@ def run() -> None:
         'source_sha256': {name: file_sha256(Path(__file__).with_name(name)) for name in
                           ['feature_extension.py', 'neural_network.py', 'data.py', 'preprocessing.py']},
     }
-    metadata['bundle_sha256'] = {str(p.relative_to(RESULTS)): file_sha256(p)
+    metadata['bundle_sha256'] = {p.relative_to(RESULTS).as_posix(): file_sha256(p)
         for p in RESULTS.rglob('*') if p.is_file()}
     _write_json(RESULTS / 'experiment_metadata.json', metadata)
     plot_results()

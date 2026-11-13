@@ -110,3 +110,23 @@ def test_extended_ann_roundtrip_input_contract_and_unseen_transmission(small_row
 def test_invalid_variant_rejected():
     with pytest.raises(ValueError, match='Unknown'):
         input_columns('target_leakage')
+
+
+def test_protected_checksum_paths_are_portable_and_exclude_nested_extension(monkeypatch, tmp_path):
+    import vehicle_efficiency.feature_extension as extension
+    raw = tmp_path / 'data' / 'raw' / 'vehicles.csv'
+    raw.parent.mkdir(parents=True)
+    raw.write_bytes(b'fixed raw snapshot')
+    parent = tmp_path / 'reports' / 'results' / 'endterm'
+    parent.mkdir(parents=True)
+    (parent / 'metrics.json').write_bytes(b'{}')
+    nested = parent / 'feature_extension'
+    nested.mkdir()
+    (nested / 'metrics.json').write_bytes(b'new experiment')
+    monkeypatch.setattr(extension, 'PROJECT_ROOT', tmp_path)
+    monkeypatch.setattr(extension, 'RAW_FILE', raw)
+    monkeypatch.setattr(extension, 'PARENT', parent)
+    hashes = extension.protected_hashes()
+    assert set(hashes) == {'data/raw/vehicles.csv', 'reports/results/endterm/metrics.json'}
+    for relative, expected in hashes.items():
+        assert extension.file_sha256(tmp_path / relative) == expected
