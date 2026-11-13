@@ -1,0 +1,79 @@
+{
+  "dataset": {
+    "source_url": "https://www.fueleconomy.gov/feg/epadata/vehicles.csv.zip",
+    "raw_sha256": "b1ff0e3071c46cdc1c99e0015878b98a01851462d7e447237ce2fc1294ccf303",
+    "n_prepared": 13975,
+    "split_seed": 42,
+    "split_method": "existing data.make_splits / GroupShuffleSplit",
+    "split_sizes": {
+      "train": 9816,
+      "val": 2080,
+      "test": 2079
+    },
+    "split_row_id_sha256": {
+      "train": "b666f5a8775ebe6b7d850a832bd0b0e912628f888bb85f92ba757264ba241783",
+      "val": "7c3c81847426fb1da736597c636a7eec6165df5e2c2ccd3a9f566295a6b88b93",
+      "test": "eb87edd1f3b22e6867c38497bcd453bdb01a566afb45189dbce0e0b66875f9dc"
+    },
+    "split_assignments_sha256": "3104489e6deddeb5cad770545d0fd8192bb432428a0039494705ef136eca01c7",
+    "raw_features": [
+      "model_year",
+      "cylinders",
+      "displacement",
+      "hybrid",
+      "turbo",
+      "supercharged",
+      "drive",
+      "transmission",
+      "vehicle_class",
+      "fuel_type"
+    ],
+    "feature_set": [
+      "model_year",
+      "cylinders",
+      "displacement",
+      "hybrid",
+      "turbo",
+      "supercharged",
+      "drive",
+      "transmission",
+      "vehicle_class",
+      "fuel_type",
+      "displacement_per_cylinder"
+    ],
+    "target": "mpg",
+    "target_source": "comb08",
+    "target_unit": "US MPG"
+  },
+  "classical_parameters": {
+    "Baseline (mean)": {},
+    "Linear Regression": {},
+    "Ridge": {
+      "model__alpha": 1.0
+    },
+    "Decision Tree": {
+      "model__max_depth": null,
+      "model__min_samples_leaf": 2
+    },
+    "KNN": {
+      "model__n_neighbors": 3,
+      "model__p": 1,
+      "model__weights": "uniform"
+    }
+  },
+  "validation_winner": "Decision Tree",
+  "best_classical": "Decision Tree",
+  "selection": "lowest validation MAE",
+  "units": "MAE and RMSE in US MPG; R2 unitless",
+  "ann_selection": "validation early stopping and selection; no ANN CV",
+  "holdout_history": "Previously evaluated in midterm; not an independent endterm test",
+  "versions": {
+    "python": "3.12.15",
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scikit-learn": "1.9.1",
+    "torch": "2.15.0",
+    "scipy": "1.18.1"
+  },
+  "test_evaluated": true
+}
