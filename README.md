@@ -1,5 +1,39 @@
 # Vehicle Fuel Efficiency Prediction
 
+## Endterm status
+
+The repository contains verified endterm ANN and PCA work using the same
+SHA-256-identified dataset snapshot and seed-42 split. The historical
+Decision-Tree figures below remain midterm context, not an endterm comparison.
+
+| Endterm component | Verified result | Artifact |
+|---|---|---|
+| Feedforward ANN | Validation MAE **1.082715 MPG**, RMSE 1.522971 MPG, R² 0.939596 | `reports/results/endterm/ann_metrics.json` |
+| Engine PCA | PC1 retains **96.06%** of training variance in cylinders and displacement | `reports/results/endterm/pca_variance.csv` |
+| K-Means | `k=3`; engine groups centre near 4-cylinder/2.04 L, 6-cylinder/3.30 L and 8.46-cylinder/5.22 L | `reports/results/endterm/clustering_profiles.csv` |
+| Unified validation winner | Decision Tree, MAE **1.051024 MPG** | `reports/results/endterm/model_comparison_validation.csv` |
+
+The 2,079-row test partition was already used in midterm. It must not be
+described as a new untouched endterm test and must not guide any further model
+selection. See [`docs/endterm_protocol.md`](docs/endterm_protocol.md) for the
+fixed data and evaluation contract.
+
+### Endterm execution order
+
+```powershell
+# Requires the existing data/raw/vehicles.csv with the protocol hash.
+py -3.12 -m pytest
+py -3.12 -m vehicle_efficiency.dimensionality_reduction
+jupyter nbconvert --to notebook --execute notebooks/endterm/02_pca.ipynb --output 02_pca.executed.ipynb
+jupyter nbconvert --to notebook --execute notebooks/endterm/03_ann.ipynb --output 03_ann.executed.ipynb
+```
+
+The committed clustering assignments produce the PCA overlay with:
+
+```powershell
+py -3.12 -m vehicle_efficiency.dimensionality_reduction --overlay reports/results/endterm/clustering_assignments_train.csv
+```
+
 Predicting the EPA combined fuel efficiency (MPG) of recent vehicles from their specifications. This is a supervised regression project built on public FuelEconomy.gov data.
 
 **Result:** the tuned Decision Tree predicts combined MPG on the held-out test set with **MAE 1.04 MPG** (RMSE 1.67, R² 0.93). That is about 4.5× better than predicting the mean (validation MAE 4.66).
@@ -40,9 +74,9 @@ The test split was evaluated **once**, after the model choice was fixed ([`repor
 
 | Actual vs predicted (validation) | Residuals (validation) |
 |---|---|
-| ![Actual vs predicted](reports/figures/actual_vs_predicted_validation.png) | ![Residuals](reports/figures/residuals_validation.png) |
+| ![Actual vs predicted](reports/figures/mid/actual_vs_predicted_validation.png) | ![Residuals](reports/figures/mid/residuals_validation.png) |
 
-Error broken down by vehicle class and the largest individual errors are saved in [`error_by_vehicle_class_validation.csv`](reports/results/error_by_vehicle_class_validation.csv) and [`largest_errors_validation.csv`](reports/results/largest_errors_validation.csv). The integrated discussion is in [`notebooks/project.ipynb`](notebooks/project.ipynb).
+Historical error tables are saved under `reports/results/`; the endterm comparison and error analysis are under `reports/results/endterm/`. The integrated report is [`notebooks/endterm/project.ipynb`](notebooks/endterm/project.ipynb).
 
 ## Dataset
 
@@ -62,11 +96,11 @@ Source URL, public-domain terms, filtering rules, schema, data-quality checks an
 
 | Target distribution | MPG by model year |
 |---|---|
-| ![Target distribution](reports/figures/eda_target_distribution.png) | ![MPG by model year](reports/figures/eda_mpg_by_model_year.png) |
+| ![Target distribution](reports/figures/mid/eda_target_distribution.png) | ![MPG by model year](reports/figures/mid/eda_mpg_by_model_year.png) |
 | **MPG by cylinders** | **Displacement vs MPG** |
-| ![MPG by cylinders](reports/figures/eda_mpg_by_cylinders.png) | ![Displacement vs MPG](reports/figures/eda_displacement_vs_mpg.png) |
+| ![MPG by cylinders](reports/figures/mid/eda_mpg_by_cylinders.png) | ![Displacement vs MPG](reports/figures/mid/eda_displacement_vs_mpg.png) |
 
-The EDA uses the training split only. See [`notebooks/01_eda.ipynb`](notebooks/01_eda.ipynb).
+The EDA uses the training split only. See [`notebooks/mid/01_eda.ipynb`](notebooks/mid/01_eda.ipynb).
 
 ## Methodology and reproducibility
 
@@ -100,8 +134,8 @@ python -m vehicle_efficiency.train --model knn --cv
 python -m vehicle_efficiency.compare
 
 # Execute the notebooks
-jupyter nbconvert --to notebook --execute notebooks/01_eda.ipynb --output 01_eda.executed.ipynb
-jupyter lab notebooks/project.ipynb
+jupyter nbconvert --to notebook --execute notebooks/mid/01_eda.ipynb --output 01_eda.executed.ipynb
+jupyter lab notebooks/endterm/project.ipynb
 ```
 
 > `python -m vehicle_efficiency.compare --test` performs the single final test evaluation. It has already been run, and the result is in `reports/results/final_test.json`. Do not rerun it to choose or adjust a model.
@@ -134,7 +168,7 @@ docs/                 team tasks, presentation outline, final-stage plan
 | Khamza | Shared data loading/split, cleaning, preprocessing, feature engineering, baseline and linear regression |
 | Askhat | Decision Tree and KNN, cross-validation, tuning, model comparison, error analysis, final test evaluation |
 
-Task ownership is detailed in [`docs/team_tasks.md`](docs/team_tasks.md). The defense plan is in [`docs/presentation_outline.md`](docs/presentation_outline.md) and [`docs/final_stage_plan.md`](docs/final_stage_plan.md). See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the workflow.
+Task ownership is detailed in [`docs/endterm_team_tasks.md`](docs/endterm_team_tasks.md). The defense plan is in [`docs/endterm_presentation_outline.md`](docs/endterm_presentation_outline.md). See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the workflow.
 
 ## Limitations
 
@@ -178,4 +212,4 @@ powershell
 python -m vehicle_efficiency.train --model decision_tree --cv
 
 Launch Jupyter lab
-jupyter lab notebooks/project.ipynb
+jupyter lab notebooks/endterm/project.ipynb

@@ -1,0 +1,29 @@
+{
+  "features": [
+    "cylinders",
+    "displacement"
+  ],
+  "fit_split": "train",
+  "n_train": 9816,
+  "imputation": "median fitted on train only",
+  "scaling": "StandardScaler fitted on train only",
+  "components": 2,
+  "split_seed": 42,
+  "snapshot": {
+    "raw_sha256": "b1ff0e3071c46cdc1c99e0015878b98a01851462d7e447237ce2fc1294ccf303",
+    "n_prepared": 13975,
+    "split_seed": 42,
+    "split_sizes": {
+      "train": 9816,
+      "val": 2080,
+      "test": 2079
+    },
+    "split_row_id_sha256": {
+      "train": "b666f5a8775ebe6b7d850a832bd0b0e912628f888bb85f92ba757264ba241783",
+      "val": "7c3c81847426fb1da736597c636a7eec6165df5e2c2ccd3a9f566295a6b88b93",
+      "test": "eb87edd1f3b22e6867c38497bcd453bdb01a566afb45189dbce0e0b66875f9dc"
+    },
+    "split_assignments_sha256": "3104489e6deddeb5cad770545d0fd8192bb432428a0039494705ef136eca01c7"
+  },
+  "interpretation_limit": "PCA describes engine-feature variance, not MPG prediction or natural clusters."
+}
