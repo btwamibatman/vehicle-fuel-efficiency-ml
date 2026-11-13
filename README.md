@@ -1,5 +1,39 @@
 # Vehicle Fuel Efficiency Prediction
 
+## Endterm status
+
+The repository contains verified endterm ANN and PCA work using the same
+SHA-256-identified dataset snapshot and seed-42 split. The historical
+Decision-Tree figures below remain midterm context, not an endterm comparison.
+
+| Endterm component | Verified result | Artifact |
+|---|---|---|
+| Feedforward ANN | Validation MAE **1.082715 MPG**, RMSE 1.522971 MPG, R² 0.939596 | `reports/results/endterm/ann_metrics.json` |
+| Engine PCA | PC1 retains **96.06%** of training variance in cylinders and displacement | `reports/results/endterm/pca_variance.csv` |
+| K-Means / unified comparison / error analysis | Pending Askhat's endterm artifacts | `docs/endterm_team_tasks.md` |
+
+The 2,079-row test partition was already used in midterm. It must not be
+described as a new untouched endterm test and must not guide any further model
+selection. See [`docs/endterm_protocol.md`](docs/endterm_protocol.md) for the
+fixed data and evaluation contract.
+
+### Endterm execution order
+
+```powershell
+# Requires the existing data/raw/vehicles.csv with the protocol hash.
+py -3.12 -m pytest
+py -3.12 -m vehicle_efficiency.dimensionality_reduction
+jupyter nbconvert --to notebook --execute notebooks/endterm/02_pca.ipynb --output 02_pca.executed.ipynb
+jupyter nbconvert --to notebook --execute notebooks/endterm/03_ann.ipynb --output 03_ann.executed.ipynb
+```
+
+After Askhat provides the required K-Means and evaluation files, create the
+cluster overlay with:
+
+```powershell
+py -3.12 -m vehicle_efficiency.dimensionality_reduction --overlay reports/results/endterm/clustering_assignments_train.csv
+```
+
 Predicting the EPA combined fuel efficiency (MPG) of recent vehicles from their specifications. This is a supervised regression project built on public FuelEconomy.gov data.
 
 **Result:** the tuned Decision Tree predicts combined MPG on the held-out test set with **MAE 1.04 MPG** (RMSE 1.67, R² 0.93). That is about 4.5× better than predicting the mean (validation MAE 4.66).
