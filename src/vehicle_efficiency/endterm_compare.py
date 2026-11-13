@@ -1,6 +1,6 @@
 """Training CV and validation comparison; separately evaluate frozen models on the previously used holdout."""
 from __future__ import annotations
-import argparse, json, platform
+import argparse, json, platform, importlib.metadata
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import GridSearchCV, GroupKFold
@@ -8,7 +8,7 @@ from .data import PROJECT_ROOT, RANDOM_SEED, _duplicate_groups, load_dataset, ma
 from .evaluation import compute_metrics
 from .models import build_baseline, build_linear_regression, build_decision_tree, build_knn
 from .preprocessing import split_xy
-from .neural_network import dataset_manifest, verify_manifest, load_ann
+from .endterm_data import verified_splits
 
 OUT = PROJECT_ROOT / 'reports/results/endterm'
 FIG = PROJECT_ROOT / 'reports/figures/endterm'
@@ -21,12 +21,12 @@ SPECS = {
 }
 
 def verified_data():
-    df=load_dataset(); splits=make_splits(df); manifest=dataset_manifest(df,splits)
-    verify_manifest(json.loads((OUT/'ann_dataset_manifest.json').read_text()), manifest)
-    return splits, manifest
+    return verified_splits()
 
 def run_validation():
     import matplotlib.pyplot as plt
+    if (OUT/'model_comparison_test.csv').exists():
+        raise RuntimeError('Holdout already evaluated; do not reselect models based on its results')
     splits, manifest=verified_data(); train,val=splits['train'],splits['val']; X,y=split_xy(train); Xv,yv=split_xy(val)
     groups=_duplicate_groups(train); models={}; rows=[]; tuning=[]; predictions=[]; params={}
     for name,(builder,grid) in SPECS.items():
@@ -39,6 +39,7 @@ def run_validation():
         rows.append({'model':name,'selected_parameters':json.dumps(search.best_params_,sort_keys=True),'train_mae':t['mae'],'validation_mae':m['mae'],'validation_rmse':m['rmse'],'validation_r2':m['r2']})
         predictions.append(pd.DataFrame({'model':name,'row_id':val.row_id.to_numpy(),'y_true':yv.to_numpy(),'y_pred':pred}))
         print(name, m, search.best_params_, flush=True)
+    from .neural_network import load_ann
     ann=load_ann(expected_manifest=manifest); pred=ann.predict(Xv); saved=pd.read_csv(OUT/'ann_predictions_validation.csv')
     actual=pd.DataFrame({'row_id':val.row_id.to_numpy(),'y_true':yv.to_numpy(),'y_pred':pred})
     merged=actual.merge(saved,on='row_id',validate='one_to_one',suffixes=('_run','_saved'))
@@ -64,10 +65,13 @@ def run_validation():
         p=allpred[allpred.model==name]; ax=axes[0,axcol]; ax.scatter(p.y_true,p.y_pred,s=7,alpha=.3); lim=[min(p.y_true.min(),p.y_pred.min()),max(p.y_true.max(),p.y_pred.max())]; ax.plot(lim,lim,'k--'); ax.set(title=name,xlabel='Actual MPG',ylabel='Predicted MPG')
         ax=axes[1,axcol]; ax.hist(p.y_pred-p.y_true,bins=50); ax.set(xlabel='Residual: predicted - actual (MPG)',ylabel='Count',title=name)
     fig.tight_layout(); fig.savefig(FIG/'evaluation_validation.png',dpi=150); plt.close(fig)
-    meta={'dataset':manifest,'classical_parameters':params,'validation_winner':winner,'best_classical':classic,'selection':'lowest validation MAE','units':'MAE and RMSE in US MPG; R2 unitless','ann_selection':'validation early stopping and selection; no ANN CV','holdout_history':'Previously evaluated in midterm; not an independent endterm test','python':platform.python_version(),'test_evaluated':False}
+    meta={'dataset':manifest,'classical_parameters':params,'validation_winner':winner,'best_classical':classic,'selection':'lowest validation MAE','units':'MAE and RMSE in US MPG; R2 unitless','ann_selection':'validation early stopping and selection; no ANN CV','holdout_history':'Previously evaluated in midterm; not an independent endterm test','versions': {'python': platform.python_version(), **{name: importlib.metadata.version(name) for name in ['numpy','pandas','scikit-learn','torch','scipy']}},'test_evaluated':False}
     (OUT/'experiment_metadata.json').write_text(json.dumps(meta,indent=2)+'\n'); print(comparison.to_string(index=False),flush=True)
 
 def run_test():
+    if (OUT/'model_comparison_test.csv').exists():
+        raise RuntimeError('Holdout already evaluated; preserve the recorded result')
+    from .neural_network import load_ann, verify_manifest
     splits,manifest=verified_data(); meta=json.loads((OUT/'experiment_metadata.json').read_text()); verify_manifest(meta['dataset'],manifest)
     train,test=splits['train'],splits['test']; X,y=split_xy(train); Xt,yt=split_xy(test); rows=[]
     for name,(builder,_) in SPECS.items():
