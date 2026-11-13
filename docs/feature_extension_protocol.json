@@ -1,0 +1,95 @@
+{
+  "declared_at_utc": "2026-11-13T20:55:11.748964+00:00",
+  "purpose": "Start-stop and detailed transmission feature ablation; declared before new model results",
+  "variants": [
+    "original",
+    "start_stop",
+    "start_stop_transmission"
+  ],
+  "original_manifest": {
+    "source_url": "https://www.fueleconomy.gov/feg/epadata/vehicles.csv.zip",
+    "raw_sha256": "b1ff0e3071c46cdc1c99e0015878b98a01851462d7e447237ce2fc1294ccf303",
+    "n_prepared": 13975,
+    "split_seed": 42,
+    "split_method": "existing data.make_splits / GroupShuffleSplit",
+    "split_sizes": {
+      "train": 9816,
+      "val": 2080,
+      "test": 2079
+    },
+    "split_row_id_sha256": {
+      "train": "b666f5a8775ebe6b7d850a832bd0b0e912628f888bb85f92ba757264ba241783",
+      "val": "7c3c81847426fb1da736597c636a7eec6165df5e2c2ccd3a9f566295a6b88b93",
+      "test": "eb87edd1f3b22e6867c38497bcd453bdb01a566afb45189dbce0e0b66875f9dc"
+    },
+    "split_assignments_sha256": "3104489e6deddeb5cad770545d0fd8192bb432428a0039494705ef136eca01c7",
+    "raw_features": [
+      "model_year",
+      "cylinders",
+      "displacement",
+      "hybrid",
+      "turbo",
+      "supercharged",
+      "drive",
+      "transmission",
+      "vehicle_class",
+      "fuel_type"
+    ],
+    "feature_set": [
+      "model_year",
+      "cylinders",
+      "displacement",
+      "hybrid",
+      "turbo",
+      "supercharged",
+      "drive",
+      "transmission",
+      "vehicle_class",
+      "fuel_type",
+      "displacement_per_cylinder"
+    ],
+    "target": "mpg",
+    "target_source": "comb08",
+    "target_unit": "US MPG"
+  },
+  "classical_parameters": {
+    "Baseline (mean)": {},
+    "Linear Regression": {},
+    "Ridge": {
+      "model__alpha": 1.0
+    },
+    "Decision Tree": {
+      "model__max_depth": null,
+      "model__min_samples_leaf": 2
+    },
+    "KNN": {
+      "model__n_neighbors": 3,
+      "model__p": 1,
+      "model__weights": "uniform"
+    }
+  },
+  "ann_parameters": {
+    "hidden_sizes": [
+      64,
+      32
+    ],
+    "learning_rate": 0.001,
+    "batch_size": 64,
+    "max_epochs": 200,
+    "patience": 20,
+    "seed": 42
+  },
+  "classical_cv": "GroupKFold(5), original exact-duplicate grouping; fixed hyperparameters, no retuning",
+  "ann_training": "One CPU run per variant, original selected architecture/lr; unchanged seed, budget and checkpoint rule",
+  "primary_metric": "MAE in US MPG; compare validation and train-only CV with identical row IDs",
+  "selection": "Report all predeclared variants and the six-model full-feature table; do not expand the experiment after seeing outcomes",
+  "test_evaluated": false,
+  "holdout_history": "Original holdout already evaluated; this is post-hoc validation-only development, not independent confirmation",
+  "source_fields": {
+    "start_stop": "startStop: Y -> 1, N -> 0, unknown -> missing",
+    "transmission_detail": "trany: full trimmed category replaces coarse transmission"
+  },
+  "preservation": "No source replacement, changed split/group definition, or overwrite of original experiment artifacts",
+  "historical_classical_metric_atol": 0.0001,
+  "historical_reconciliation_note": "Use the rerun current-environment original as the paired feature baseline. Historical Ridge metrics reconcile within 0.0001 MPG. Historical KNN predictions may differ only at verified equal-distance neighbor boundaries; record every mismatch. ANN control predictions must reproduce within 1e-10. This reconciliation was completed before evaluating either new feature variant."
+}

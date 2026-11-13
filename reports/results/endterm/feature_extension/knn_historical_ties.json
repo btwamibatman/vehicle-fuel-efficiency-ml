@@ -1,0 +1,6 @@
+{
+  "changed_prediction_rows": 292,
+  "all_changed_rows_have_equal_third_fourth_distance": true,
+  "total_boundary_tie_rows": 1329,
+  "interpretation": "Equal-distance neighbor selection differs; compare variants against the rerun current-environment control"
+}

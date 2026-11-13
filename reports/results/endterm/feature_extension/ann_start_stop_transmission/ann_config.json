@@ -1,0 +1,110 @@
+{
+  "training": {
+    "hidden_sizes": [
+      64,
+      32
+    ],
+    "learning_rate": 0.001,
+    "batch_size": 64,
+    "max_epochs": 200,
+    "patience": 20,
+    "seed": 42
+  },
+  "input_dim": 72,
+  "best_epoch": 134,
+  "activation": "ReLU",
+  "output_activation": "linear",
+  "loss": "MSE (train-standardised target)",
+  "optimizer": "Adam",
+  "target_scaling": "StandardScaler fitted on train",
+  "early_stopping": "strictly lowest validation loss; patience epochs without improvement",
+  "candidate_selection": "Frozen architecture and learning rate; checkpoint by validation MSE",
+  "metadata": {
+    "input_features": [
+      "model_year",
+      "cylinders",
+      "displacement",
+      "hybrid",
+      "turbo",
+      "supercharged",
+      "drive",
+      "transmission_detail",
+      "vehicle_class",
+      "fuel_type",
+      "start_stop"
+    ],
+    "dataset": {
+      "source_url": "https://www.fueleconomy.gov/feg/epadata/vehicles.csv.zip",
+      "raw_sha256": "b1ff0e3071c46cdc1c99e0015878b98a01851462d7e447237ce2fc1294ccf303",
+      "n_prepared": 13975,
+      "split_seed": 42,
+      "split_method": "existing data.make_splits / GroupShuffleSplit",
+      "split_sizes": {
+        "train": 9816,
+        "val": 2080,
+        "test": 2079
+      },
+      "split_row_id_sha256": {
+        "train": "b666f5a8775ebe6b7d850a832bd0b0e912628f888bb85f92ba757264ba241783",
+        "val": "7c3c81847426fb1da736597c636a7eec6165df5e2c2ccd3a9f566295a6b88b93",
+        "test": "eb87edd1f3b22e6867c38497bcd453bdb01a566afb45189dbce0e0b66875f9dc"
+      },
+      "split_assignments_sha256": "3104489e6deddeb5cad770545d0fd8192bb432428a0039494705ef136eca01c7",
+      "raw_features": [
+        "model_year",
+        "cylinders",
+        "displacement",
+        "hybrid",
+        "turbo",
+        "supercharged",
+        "drive",
+        "transmission_detail",
+        "vehicle_class",
+        "fuel_type",
+        "start_stop"
+      ],
+      "feature_set": [
+        "model_year",
+        "cylinders",
+        "displacement",
+        "hybrid",
+        "turbo",
+        "supercharged",
+        "drive",
+        "transmission_detail",
+        "vehicle_class",
+        "fuel_type",
+        "start_stop",
+        "displacement_per_cylinder"
+      ],
+      "target": "mpg",
+      "target_source": "comb08",
+      "target_unit": "US MPG",
+      "feature_variant": "start_stop_transmission"
+    },
+    "versions": {
+      "python": "3.12.3",
+      "numpy": "2.5.3",
+      "pandas": "3.0.6",
+      "scipy": "1.18.1",
+      "scikit-learn": "1.9.1",
+      "torch": "2.15.0+cpu",
+      "joblib": "1.6.0",
+      "matplotlib": "3.11.2",
+      "seaborn": "0.13.2",
+      "jupyter": "1.1.1",
+      "nbconvert": "7.17.1",
+      "nbformat": "5.11.1",
+      "nbclient": "0.11.0",
+      "ipykernel": "7.4.0",
+      "pytest": "9.1.1"
+    },
+    "candidate_selection": "Frozen architecture and learning rate; checkpoint by validation MSE",
+    "feature_variant": "start_stop_transmission",
+    "test_evaluated": false
+  },
+  "file_sha256": {
+    "ann_model.pt": "37cb0ba4ecd8721d64df1e6aad16706b1f2bd8c0ef76b85a9764674be36f1ce1",
+    "ann_preprocessing.joblib": "5c5b8b9451715bb841cc1a47b2b4b030a4a78c907f0025f014a38afa388df394"
+  }
+}

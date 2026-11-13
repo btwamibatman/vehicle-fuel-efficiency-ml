@@ -1,0 +1,188 @@
+{
+  "protocol": {
+    "declared_at_utc": "2026-11-13T20:55:11.748964+00:00",
+    "purpose": "Start-stop and detailed transmission feature ablation; declared before new model results",
+    "variants": [
+      "original",
+      "start_stop",
+      "start_stop_transmission"
+    ],
+    "original_manifest": {
+      "source_url": "https://www.fueleconomy.gov/feg/epadata/vehicles.csv.zip",
+      "raw_sha256": "b1ff0e3071c46cdc1c99e0015878b98a01851462d7e447237ce2fc1294ccf303",
+      "n_prepared": 13975,
+      "split_seed": 42,
+      "split_method": "existing data.make_splits / GroupShuffleSplit",
+      "split_sizes": {
+        "train": 9816,
+        "val": 2080,
+        "test": 2079
+      },
+      "split_row_id_sha256": {
+        "train": "b666f5a8775ebe6b7d850a832bd0b0e912628f888bb85f92ba757264ba241783",
+        "val": "7c3c81847426fb1da736597c636a7eec6165df5e2c2ccd3a9f566295a6b88b93",
+        "test": "eb87edd1f3b22e6867c38497bcd453bdb01a566afb45189dbce0e0b66875f9dc"
+      },
+      "split_assignments_sha256": "3104489e6deddeb5cad770545d0fd8192bb432428a0039494705ef136eca01c7",
+      "raw_features": [
+        "model_year",
+        "cylinders",
+        "displacement",
+        "hybrid",
+        "turbo",
+        "supercharged",
+        "drive",
+        "transmission",
+        "vehicle_class",
+        "fuel_type"
+      ],
+      "feature_set": [
+        "model_year",
+        "cylinders",
+        "displacement",
+        "hybrid",
+        "turbo",
+        "supercharged",
+        "drive",
+        "transmission",
+        "vehicle_class",
+        "fuel_type",
+        "displacement_per_cylinder"
+      ],
+      "target": "mpg",
+      "target_source": "comb08",
+      "target_unit": "US MPG"
+    },
+    "classical_parameters": {
+      "Baseline (mean)": {},
+      "Linear Regression": {},
+      "Ridge": {
+        "model__alpha": 1.0
+      },
+      "Decision Tree": {
+        "model__max_depth": null,
+        "model__min_samples_leaf": 2
+      },
+      "KNN": {
+        "model__n_neighbors": 3,
+        "model__p": 1,
+        "model__weights": "uniform"
+      }
+    },
+    "ann_parameters": {
+      "hidden_sizes": [
+        64,
+        32
+      ],
+      "learning_rate": 0.001,
+      "batch_size": 64,
+      "max_epochs": 200,
+      "patience": 20,
+      "seed": 42
+    },
+    "classical_cv": "GroupKFold(5), original exact-duplicate grouping; fixed hyperparameters, no retuning",
+    "ann_training": "One CPU run per variant, original selected architecture/lr; unchanged seed, budget and checkpoint rule",
+    "primary_metric": "MAE in US MPG; compare validation and train-only CV with identical row IDs",
+    "selection": "Report all predeclared variants and the six-model full-feature table; do not expand the experiment after seeing outcomes",
+    "test_evaluated": false,
+    "holdout_history": "Original holdout already evaluated; this is post-hoc validation-only development, not independent confirmation",
+    "source_fields": {
+      "start_stop": "startStop: Y -> 1, N -> 0, unknown -> missing",
+      "transmission_detail": "trany: full trimmed category replaces coarse transmission"
+    },
+    "preservation": "No source replacement, changed split/group definition, or overwrite of original experiment artifacts",
+    "historical_classical_metric_atol": 0.0001,
+    "historical_reconciliation_note": "Use the rerun current-environment original as the paired feature baseline. Historical Ridge metrics reconcile within 0.0001 MPG. Historical KNN predictions may differ only at verified equal-distance neighbor boundaries; record every mismatch. ANN control predictions must reproduce within 1e-10. This reconciliation was completed before evaluating either new feature variant."
+  },
+  "versions": {
+    "python": "3.12.3",
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.9.1",
+    "torch": "2.15.0+cpu",
+    "joblib": "1.6.0",
+    "matplotlib": "3.11.2",
+    "seaborn": "0.13.2",
+    "jupyter": "1.1.1",
+    "nbconvert": "7.17.1",
+    "nbformat": "5.11.1",
+    "nbclient": "0.11.0",
+    "ipykernel": "7.4.0",
+    "pytest": "9.1.1"
+  },
+  "protected_sha256": {
+    "data/raw/vehicles.csv": "b1ff0e3071c46cdc1c99e0015878b98a01851462d7e447237ce2fc1294ccf303",
+    "reports/results/endterm/ann_config.json": "d9d0276fc0ecdf9820a93d27cd002c3c1363f3849b371661d170fc2a2670d021",
+    "reports/results/endterm/ann_dataset_manifest.json": "f7d37852f3d6db3d22642c6a0b8b15c4e01c1a02bbcefa80c47ec34d28a688ed",
+    "reports/results/endterm/ann_history.csv": "8691fa31729d3700626b8945390af04c8c041e712cea7a695ea780726714a2e0",
+    "reports/results/endterm/ann_metrics.json": "712de0d03ad87ba6a019b1e7fa1520996638c7892421b5cb90cfc9832a128ab3",
+    "reports/results/endterm/ann_model.pt": "b4314edb37843d25e2d8d298c77ec7cb9337d790b4bba27e2dd5d70f32e9e61b",
+    "reports/results/endterm/ann_predictions_validation.csv": "53d25c4bf354bbbf7f0edef88b86016cf9bd72a78ec541d9739bce18799799de",
+    "reports/results/endterm/ann_preprocessing.joblib": "1a3a8d8d27f4bc0ada186b01acbde2987b4dcef0a12d5bf2537db3c3cb82324c",
+    "reports/results/endterm/ann_search.csv": "4af2966685adc5cb8e418756132e091b34a43cfce6c804801d8e804c1f70fbab",
+    "reports/results/endterm/ann_validation_checks.json": "2b13451d42e2fd880ebf087af3e5b0d68e189bd9d692bf5b84b31d53c3cf2acf",
+    "reports/results/endterm/clustering_assignments_train.csv": "acea0c0f4b8fbbe8910029bd3127625ceaf1e37ffee544f77b2a13cba03fb972",
+    "reports/results/endterm/clustering_config.json": "a66aa95b8ce02709dd7dfea2d2d5ca15f5ee5de3c1926d9346aa98abb5f0a87b",
+    "reports/results/endterm/clustering_profiles.csv": "e7c7b226bb6b8d56f3359ba8acd0347e829e064cb5d90e0bc1a21c81e267d885",
+    "reports/results/endterm/clustering_search.csv": "84c85a5a9fb75696b62dd1be062c8d8e050329e218f34079996ef3e4d0ea23c7",
+    "reports/results/endterm/error_by_group_validation.csv": "bf4e1a663ea15afa9d6713b185cbf86bf1e913866f18223f8dfd1937727da95d",
+    "reports/results/endterm/experiment_metadata.json": "0718c7a7de75eb89ed682219d7900e9795a7653367a47ee90bfad5984f6b65db",
+    "reports/results/endterm/largest_errors_validation.csv": "d115b6f28e5ec5abec26d53df558b1a249b24415604956f55dc98dfcf1c0d769",
+    "reports/results/endterm/model_comparison_test.csv": "0c050e83f9de6e4ae37dfbfe039be511497a87f929d03d8766a0e6f1cd49d1df",
+    "reports/results/endterm/model_comparison_validation.csv": "8395f3d5e93d594c84d835a70962f9e82d7c0df58b46aeb5b8335afce202cbd0",
+    "reports/results/endterm/pca_config.json": "7422884db030459dae9e779e9db5d0e0a1a447a401e43b12c6f2f48f9e71e0d7",
+    "reports/results/endterm/pca_coordinates_train.csv": "50280a4dfca0b8a74706b1d56adaeacf37fae001840f8fc607a3a02dfea91002",
+    "reports/results/endterm/pca_loadings.csv": "27e76058f41eaf628176e3428cb210faf9eda0a3dc6dce617354091a96bdaf42",
+    "reports/results/endterm/pca_variance.csv": "e3e10077f6eb330f0686d59a4049e6b09c7aa4db49d9ed5bff3f27ce0a0fdfbe",
+    "reports/results/endterm/supervised_tuning.csv": "452d7909e1597c6374bf4633dce57b1e49ffda1575b43167257b0c205b3ed465",
+    "reports/results/endterm/validation_predictions.csv": "36e168b5ed41d7bd1fa4f9140b680a7bf6fde918987ebb8fa0aa3d3b2128ba59"
+  },
+  "validation_winner_full": "Feedforward ANN",
+  "best_classical_full": "KNN",
+  "test_evaluated": false,
+  "selection_metric": "validation MAE (US MPG)",
+  "scope": "Post-hoc feature study after original holdout use; no independent confirmation",
+  "limitations": [
+    "One seed/snapshot; validation reused for checkpoints and comparisons",
+    "Frozen hyperparameters were originally selected using the coarse features",
+    "Do not infer causal start-stop or transmission effects from this ablation"
+  ],
+  "source_sha256": {
+    "feature_extension.py": "68f5238833cbb3b145645299d991898dc8936701ccccbaa4950063f6673d5f24",
+    "neural_network.py": "bcbba74b27dac873f36b3de3269f867c452a743c8bd4e5778e917e7c60dc95a5",
+    "data.py": "129c88df01e70216afb3f3e742e460ff2a0a202483f4f3e5c74328caa1d43066",
+    "preprocessing.py": "513aab025983239662eca895b8c919682e1b275e252cbf583eb77c35d4ece556"
+  },
+  "bundle_sha256": {
+    "ablation_validation.csv": "b63be27a462f7197f68868271c8a7d1beea95c7a97b303d0ad46523deb813d23",
+    "ann_history.csv": "4999142fb514f245c9afd7ae92b98b43018ac05bb0ce7cf1169e60f82b414f2b",
+    "classical_models.joblib": "d4d0afdcba01f61411f6f0b8f3dc6c24b1a27a45fa5772f27220c9f97cc79ec8",
+    "cv_folds.csv": "972e3c76826b7a27eb29c4b2e817277a60aa29ebcb150671eb5fa9d72c7190c0",
+    "error_by_group_validation.csv": "0ac1b08028646b0f5e1f44876abe44395689edbdb71f937e0a8b1dfcb5f7a056",
+    "historical_reconciliation.csv": "481486c9d3a858e0d28a21ad4395f6b0d6aa4c561761899411890c65b2da0f6f",
+    "knn_historical_ties.json": "f4178eec76763a15022993db8bd9bf3ee8710dcbd35f1321dcb172f1ea376412",
+    "largest_errors_validation.csv": "55801282cd35c1c6e26c9dc9bab6ecd5a7e109166e0222599de8f4023eb20ab7",
+    "model_comparison_validation.csv": "0ac03017e348aa4a001f0b7f4a1b8ea2d641213088bb235fee0dc6b4a5a0cf6f",
+    "validation_predictions.csv": "817a12be9fe4800b11558036897255ec8c452ba9134a31f08f26ae38bc7b5c12",
+    "ann_original/ann_config.json": "48584a36e6096fecfaa0a19cf4187a66c6d8cbe573a67b1611fa2bb6d3c880d7",
+    "ann_original/ann_model.pt": "b4314edb37843d25e2d8d298c77ec7cb9337d790b4bba27e2dd5d70f32e9e61b",
+    "ann_original/ann_preprocessing.joblib": "1a3a8d8d27f4bc0ada186b01acbde2987b4dcef0a12d5bf2537db3c3cb82324c",
+    "ann_start_stop/ann_config.json": "45b8381f9c422ae7ee4dd60b4d1861abe03201ef564ad4374125e274e6c6eba6",
+    "ann_start_stop/ann_model.pt": "58149d67b5bd648d6b8df4b30540fc83bc93515ae827bf567e2b33349f521157",
+    "ann_start_stop/ann_preprocessing.joblib": "d2dd8bae6aead44cc4ce8e408f3df1864a992f74bde3f36ca80ac37557fc1308",
+    "ann_start_stop_transmission/ann_config.json": "75feddedadc7e02b5b90d48fc3e2e3c96443d3637df8cd4ecbf1214d5d2d9c9f",
+    "ann_start_stop_transmission/ann_model.pt": "37cb0ba4ecd8721d64df1e6aad16706b1f2bd8c0ef76b85a9764674be36f1ce1",
+    "ann_start_stop_transmission/ann_preprocessing.joblib": "5c5b8b9451715bb841cc1a47b2b4b030a4a78c907f0025f014a38afa388df394"
+  },
+  "post_run_changes": [
+    "Repositioned the ablation legend outside plot marks; no fitting, features, predictions or metrics changed",
+    "Review fix: portable POSIX relative paths for artifact checksum keys; unchanged files, predictions and metrics"
+  ],
+  "final_source_sha256": {
+    "feature_extension.py": "47f1ab38c4f80394c26d163c0d8afef85ab860efa73225ad4bafb21cf3dc2027",
+    "neural_network.py": "bcbba74b27dac873f36b3de3269f867c452a743c8bd4e5778e917e7c60dc95a5",
+    "data.py": "129c88df01e70216afb3f3e742e460ff2a0a202483f4f3e5c74328caa1d43066",
+    "preprocessing.py": "513aab025983239662eca895b8c919682e1b275e252cbf583eb77c35d4ece556"
+  }
+}

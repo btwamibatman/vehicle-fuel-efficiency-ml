@@ -25,3 +25,11 @@ creates the overlay with:
 ```powershell
 py -3.12 -m vehicle_efficiency.dimensionality_reduction --overlay reports/results/endterm/clustering_assignments_train.csv
 ```
+
+## Subsequent feature extension
+
+Khamza's branch `khamza/start-stop-transmission` adds the controlled start-stop
+and detailed-transmission study, all model bundles, a numbered notebook,
+updated report and Russian defense notes. This does not change the provenance
+of Aktore's PCA or Askhat's original clustering/tuning work. The new study uses
+frozen previously selected parameters and does not evaluate the old holdout.

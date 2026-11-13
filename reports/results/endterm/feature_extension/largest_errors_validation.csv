@@ -1,0 +1,21 @@
+variant,model_predictor,row_id,y_true,y_pred,make,model_vehicle,vehicle_class,hybrid,start_stop,transmission_detail,error,absolute_error
+start_stop_transmission,KNN,43268,40,51.333333333333336,Honda,CR-V FWD,Midsize Station Wagons,1,1.0,Automatic (variable gear ratios),11.333333333333336,11.333333333333336
+start_stop_transmission,KNN,44109,28,38.333333333333336,Mitsubishi,Outlander 2WD,Small Sport Utility Vehicle 2WD,1,1.0,Automatic (AV-S8),10.333333333333336,10.333333333333336
+start_stop_transmission,KNN,29343,34,24.0,BMW,328d xDrive,Compact Cars,0,0.0,Automatic (S8),-10.0,10.0
+start_stop_transmission,KNN,31786,52,42.0,Toyota,Camry Hybrid LE,Midsize Cars,1,1.0,Automatic (AV-S6),-10.0,10.0
+start_stop_transmission,KNN,33765,52,42.0,Toyota,Camry Hybrid LE,Midsize Cars,1,1.0,Automatic (AV-S6),-10.0,10.0
+start_stop_transmission,KNN,33492,34,25.0,Jaguar,XE AWD,Compact Cars,0,1.0,Automatic (S8),-9.0,9.0
+start_stop_transmission,KNN,30848,34,25.666666666666668,Jaguar,XE AWD,Compact Cars,0,1.0,Automatic (S8),-8.333333333333332,8.333333333333332
+start_stop_transmission,KNN,33503,35,26.666666666666668,Jaguar,XF,Midsize Cars,0,1.0,Automatic (S8),-8.333333333333332,8.333333333333332
+start_stop_transmission,KNN,44821,40,48.0,Honda,CR-V FWD,Midsize Station Wagons,1,1.0,Automatic (variable gear ratios),8.0,8.0
+start_stop_transmission,KNN,42820,28,20.666666666666668,Volkswagen,Taos 4motion,Small Sport Utility Vehicle 4WD,0,1.0,Automatic (S8),-7.333333333333332,7.333333333333332
+start_stop_transmission,Feedforward ANN,31786,52,42.093692779541016,Toyota,Camry Hybrid LE,Midsize Cars,1,1.0,Automatic (AV-S6),-9.906307220458984,9.906307220458984
+start_stop_transmission,Feedforward ANN,39963,57,48.13325881958008,Toyota,Prius,Midsize Cars,1,1.0,Automatic (variable gear ratios),-8.866741180419922,8.866741180419922
+start_stop_transmission,Feedforward ANN,33765,52,43.297752380371094,Toyota,Camry Hybrid LE,Midsize Cars,1,1.0,Automatic (AV-S6),-8.702247619628906,8.702247619628906
+start_stop_transmission,Feedforward ANN,34311,52,44.746559143066406,Toyota,Corolla Hybrid,Compact Cars,1,1.0,Automatic (variable gear ratios),-7.253440856933594,7.253440856933594
+start_stop_transmission,Feedforward ANN,30180,23,29.656963348388672,Buick,Regal,Midsize Cars,0,0.0,Automatic (S6),6.656963348388672,6.656963348388672
+start_stop_transmission,Feedforward ANN,27456,23,28.952375411987305,Buick,Regal,Midsize Cars,0,0.0,Automatic (S6),5.952375411987305,5.952375411987305
+start_stop_transmission,Feedforward ANN,31023,35,29.23643684387207,Honda,Civic 4Dr,Midsize Cars,0,0.0,Manual 6-spd,-5.76356315612793,5.76356315612793
+start_stop_transmission,Feedforward ANN,32693,56,50.420440673828125,Toyota,Prius Eco,Midsize Cars,1,1.0,Automatic (variable gear ratios),-5.579559326171875,5.579559326171875
+start_stop_transmission,Feedforward ANN,31297,43,48.49821472167969,Kia,Niro Touring,Small Station Wagons,1,1.0,Automatic (AM6),5.4982147216796875,5.4982147216796875
+start_stop_transmission,Feedforward ANN,43180,28,23.189603805541992,BMW,540i xDrive Sedan,Midsize Cars,1,1.0,Automatic (S8),-4.810396194458008,4.810396194458008

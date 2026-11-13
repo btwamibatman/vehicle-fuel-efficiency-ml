@@ -24,6 +24,7 @@ import joblib
 import numpy as np
 import pandas as pd
 from scipy import sparse
+from sklearn.base import clone
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import FunctionTransformer, StandardScaler
 import torch
@@ -153,7 +154,8 @@ class ANNModel:
 
     def predict(self, X: pd.DataFrame) -> np.ndarray:
         """Predict unrounded MPG from the shared raw feature columns, without refit."""
-        matrix = _dense_float32(self.preprocessor.transform(X[RAW_FEATURES]))
+        columns = self.metadata.get("input_features", RAW_FEATURES)
+        matrix = _dense_float32(self.preprocessor.transform(X[columns]))
         self.network.eval()
         with torch.inference_mode():
             scaled = self.network(torch.from_numpy(matrix)).numpy()
@@ -161,7 +163,8 @@ class ANNModel:
 
 
 def train_ann(X_train: pd.DataFrame, y_train, X_val: pd.DataFrame, y_val,
-              config: ANNConfig = ANNConfig()) -> tuple[ANNModel, pd.DataFrame]:
+              config: ANNConfig = ANNConfig(), *,
+              preprocessor: Pipeline | None = None) -> tuple[ANNModel, pd.DataFrame]:
     """Fit on train; stop/restore by validation scaled MSE. No test argument.
 
     Epoch metrics are evaluated on whole splits AFTER the epoch update. Loss is
@@ -170,12 +173,15 @@ def train_ann(X_train: pd.DataFrame, y_train, X_val: pd.DataFrame, y_val,
     if min(config.max_epochs, config.patience, config.batch_size) < 1:
         raise ValueError("epochs, patience and batch_size must be positive")
     set_seeds(config.seed)
-    prep = Pipeline([
+    # A supplied pipeline supports the separately recorded feature extension;
+    # existing callers retain the original input contract and preprocessing.
+    columns = list(X_train.columns) if preprocessor is not None else RAW_FEATURES
+    prep = clone(preprocessor) if preprocessor is not None else Pipeline([
         ("features", FunctionTransformer(add_features)),
         ("prep", build_preprocessor(scale=True, engineered=True)),
     ])
-    train_array = _dense_float32(prep.fit_transform(X_train[RAW_FEATURES]))
-    val_array = _dense_float32(prep.transform(X_val[RAW_FEATURES]))
+    train_array = _dense_float32(prep.fit_transform(X_train[columns]))
+    val_array = _dense_float32(prep.transform(X_val[columns]))
     target_scaler = StandardScaler().fit(np.asarray(y_train).reshape(-1, 1))
     train_target = target_scaler.transform(np.asarray(y_train).reshape(-1, 1))
     val_target = target_scaler.transform(np.asarray(y_val).reshape(-1, 1))
@@ -223,7 +229,8 @@ def train_ann(X_train: pd.DataFrame, y_train, X_val: pd.DataFrame, y_val,
     history = pd.DataFrame(records)
     history["best_epoch"] = best_epoch
     history["is_best_epoch"] = history["epoch"].eq(best_epoch)
-    return ANNModel(net, prep, target_scaler, config, best_epoch, {}), history
+    return ANNModel(net, prep, target_scaler, config, best_epoch,
+                    {"input_features": list(columns)}), history
 
 
 def select_ann(X_train, y_train, X_val, y_val, *, max_epochs: int = 200):
@@ -274,7 +281,8 @@ def save_ann(model: ANNModel, directory: Path = RESULTS_DIR) -> None:
         "output_activation": "linear", "loss": "MSE (train-standardised target)",
         "optimizer": "Adam", "target_scaling": "StandardScaler fitted on train",
         "early_stopping": "strictly lowest validation loss; patience epochs without improvement",
-        "candidate_selection": "lowest validation MAE at restored checkpoint; fixed grid order breaks ties",
+        "candidate_selection": model.metadata.get("candidate_selection",
+            "lowest validation MAE at restored checkpoint; fixed grid order breaks ties"),
         "metadata": model.metadata,
         "file_sha256": {weights.name: file_sha256(weights),
                         preprocessing.name: file_sha256(preprocessing)},

@@ -8,6 +8,45 @@ The endterm continues the midterm dataset and regression pipeline, adding
 **K-Means, PCA, a PyTorch feedforward ANN, refined classical tuning and a unified
 six-model comparison**. The shared data and preprocessing remain the foundation.
 
+## Latest update: start-stop and detailed transmission
+
+The controlled feature extension is complete on branch
+`khamza/start-stop-transmission`. It uses the same source bytes, row IDs and
+duplicate-grouped split, adding start-stop and replacing coarse transmission
+with the detailed `trany` category. No new data download or holdout evaluation.
+
+**Extended ANN validation:** MAE **0.805409 MPG**, RMSE **1.197025 MPG**,
+R-squared **0.962684**. The original ANN control has MAE 1.082715 MPG (25.61%
+reduction). Full-feature KNN MAE is 0.834135, Decision Tree 0.836948, Linear
+Regression 1.749138, Ridge 1.750653 and mean baseline 4.661760 MPG.
+ANN leads the new validation table; the original tree result below belongs to
+the earlier coarse-feature experiment.
+
+Three predeclared variants use frozen prior estimator parameters; classical
+training-only grouped CV also improves. ANN is one frozen-architecture run per
+variant, not a new grid or CV. New input dimensions: 40 / 41 / 72. The combined
+ANN restores epoch 134 after stopping at 154. These are post-hoc development
+results on reused validation, not independent test confirmation. Old test
+scores must not be attached to the new models.
+
+Start with the integrated report or
+[`05_feature_extension.ipynb`](notebooks/endterm/05_feature_extension.ipynb).
+Russian results and defense notes:
+[`feature_extension_results_ru.md`](docs/feature_extension_results_ru.md).
+The original ANN/control is reproduced; historical KNN equal-distance ties are
+explicitly reconciled rather than hidden in the improvement claim.
+
+```powershell
+.\.venv\Scripts\python.exe -m vehicle_efficiency.feature_extension --verify
+.\.venv\Scripts\python.exe -X utf8 scripts/feature_extension_walkthrough.py
+```
+
+New artifacts live under `reports/results/endterm/feature_extension/` and
+`reports/figures/endterm/feature_extension/`. Parent experiment files are preserved
+byte-for-byte. `python -m vehicle_efficiency.feature_extension` runs the full
+study only when its completion metadata does not already exist; use `--verify`
+for the recorded result.
+
 ## Start here
 
 Open [`notebooks/endterm/project.ipynb`](notebooks/endterm/project.ipynb) for the
@@ -21,13 +60,14 @@ or evaluating the holdout again.
 | `01_clustering.ipynb` | K-Means search and engine profiles | Reads saved results and figures |
 | `02_pca.ipynb` | Train-only PCA and strict cluster overlay join | Recomputes PCA in memory and checks saved results |
 | `03_ann.ipynb` | Full ANN implementation walkthrough and training history | Retrains the same four declared candidates and refreshes ANN artifacts |
-| `04_evaluation.ipynb` | Six-model comparison and error analysis | Reads saved results and figures |
+| `04_evaluation.ipynb` | Original six-model comparison and error analysis | Reads saved results and figures |
+| `05_feature_extension.ipynb` | Three-variant feature ablation and new six-model comparison | Verifies frozen extended models; no retraining |
 | `project.ipynb` | Complete report for the defense | Reads final results and audits training data |
 
 The report is the presentation entry point. The numbered notebooks explain the
-individual methods; they are not six competing final reports.
+individual methods; they are not competing final reports.
 
-## Final results
+## Original endterm results (before feature extension)
 
 Validation uses the same 2,080 rows for every model. Classical models use grouped
 five-fold CV within train. The ANN uses validation for early stopping and its
@@ -120,7 +160,7 @@ comparison; do not replace the snapshot or reference manifest for the defense.
 No download is needed on the current machine.
 
 The numbered notebooks run independently from their first cell in the same
-environment. For a full walkthrough use 00, 01, 02, 03, 04, then project.
+environment. For a full walkthrough use 00, 01, 02, 03, 04, 05, then project.
 Notebook 03 reruns the fixed experiment; use project for a presentation without
 retraining. The saved comparison already includes final evaluation.
 `vehicle_efficiency.endterm_compare` intentionally refuses new selection once
@@ -133,7 +173,7 @@ result tables are retained for provenance and are not the endterm comparison.
 | Member | Endterm contribution | Implementation commits |
 |---|---|---|
 | Aktore | PCA, cluster overlay, report integration and documentation | `2489abc`, `31097f4`, `c36ca09` |
-| Khamza | Feedforward ANN, fixed experiment protocol, reproducibility and walkthrough | `eba318f`, `a0bf7a9` |
+| Khamza | Feedforward ANN, fixed protocol, reproducibility, walkthrough and subsequent start-stop/transmission study | `eba318f`, `a0bf7a9` |
 | Askhat | K-Means, classical refinement, comparison and error analysis | `316c517`, `34fed77`, `47b4919`, `b455bad` |
 
 Shared midterm work includes data loading, cleaning, preprocessing, feature
