@@ -10,7 +10,8 @@ Decision-Tree figures below remain midterm context, not an endterm comparison.
 |---|---|---|
 | Feedforward ANN | Validation MAE **1.082715 MPG**, RMSE 1.522971 MPG, R² 0.939596 | `reports/results/endterm/ann_metrics.json` |
 | Engine PCA | PC1 retains **96.06%** of training variance in cylinders and displacement | `reports/results/endterm/pca_variance.csv` |
-| K-Means / unified comparison / error analysis | Pending Askhat's endterm artifacts | `docs/endterm_team_tasks.md` |
+| K-Means | `k=3`; engine groups centre near 4-cylinder/2.04 L, 6-cylinder/3.30 L and 8.46-cylinder/5.22 L | `reports/results/endterm/clustering_profiles.csv` |
+| Unified validation winner | Decision Tree, MAE **1.051024 MPG** | `reports/results/endterm/model_comparison_validation.csv` |
 
 The 2,079-row test partition was already used in midterm. It must not be
 described as a new untouched endterm test and must not guide any further model
@@ -27,8 +28,7 @@ jupyter nbconvert --to notebook --execute notebooks/endterm/02_pca.ipynb --outpu
 jupyter nbconvert --to notebook --execute notebooks/endterm/03_ann.ipynb --output 03_ann.executed.ipynb
 ```
 
-After Askhat provides the required K-Means and evaluation files, create the
-cluster overlay with:
+The committed clustering assignments produce the PCA overlay with:
 
 ```powershell
 py -3.12 -m vehicle_efficiency.dimensionality_reduction --overlay reports/results/endterm/clustering_assignments_train.csv

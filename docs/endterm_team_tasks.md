@@ -6,17 +6,16 @@ EPA snapshot and seed-42 duplicate-grouped split in `docs/endterm_protocol.md`.
 
 | Member | Responsibility | Status on 2026-11-13 | Required handoff |
 |---|---|---|---|
-| Aktore | Training-only PCA of `cylinders` and `displacement`; final notebook, documentation and deck | PCA complete; final assembly pending upstream artifacts | `pca_*.csv`, figures, PCA module/notebook |
+| Aktore | Training-only PCA of `cylinders` and `displacement`; final notebook, documentation and deck | PCA complete; integration in progress | `pca_*.csv`, figures, PCA module/notebook |
 | Khamza | Shared protocol and reproducibility; feedforward ANN | Complete and merged | `ann_*` bundle, validation predictions, curves |
-| Askhat | K-Means, classical-model refinement, validated comparison and error analysis | Pending | `clustering_*`, `model_comparison_*`, `validation_predictions.csv`, error-analysis tables/figures |
+| Askhat | K-Means, classical-model refinement, validated comparison and error analysis | Complete in `askhat/endterm-clustering-evaluation` | `clustering_*`, `model_comparison_*`, `validation_predictions.csv`, error-analysis tables/figures |
 
 ## Integration gate
 
-Aktore can complete PCA independently. The following items must not be filled
-with historical or invented values: the PCA cluster overlay, cluster profiles,
-final comparison, error analysis, and the corresponding presentation slides.
-They require Askhat's files under `reports/results/endterm/` and
-`reports/figures/endterm/`.
+Aktore completed the strict PCA/K-Means row-ID join after importing Askhat's
+committed artifacts. The cluster overlay is
+`reports/figures/endterm/pca_clusters_train.png`. Final slides and prose must
+continue to use the committed artifacts rather than historical midterm values.
 
 Before integrating, Askhat must verify the raw snapshot and split against
 `ann_dataset_manifest.json`, use unique `row_id` values, and provide the

@@ -10,15 +10,15 @@
 
 ## Required from Askhat before final submission
 
-- [ ] `clustering_assignments_train.csv` with unique train `row_id,cluster` pairs.
-- [ ] `clustering_search.csv`, profiles, configuration and labelled clustering figures.
-- [ ] Endterm classical-model tuning records and a validation comparison on the shared split.
-- [ ] Unified validation predictions and error-analysis outputs for ANN and the selected classical model.
-- [ ] Final fixed-model test table, explicitly labelled as the previously used midterm holdout.
+- [x] `clustering_assignments_train.csv` with unique train `row_id,cluster` pairs.
+- [x] `clustering_search.csv`, profiles, configuration and labelled clustering figures.
+- [x] Endterm classical-model tuning records and a validation comparison on the shared split.
+- [x] Unified validation predictions and error-analysis outputs for ANN and the selected classical model.
+- [x] Final fixed-model test table, explicitly labelled as the previously used midterm holdout.
 
 ## Final assembly after those files arrive
 
-- [ ] Generate the PCA/K-Means overlay with an exact row-ID match.
+- [x] Generate the PCA/K-Means overlay with an exact row-ID match.
 - [ ] Complete `notebooks/endterm/project.ipynb` without rerunning selection on test data.
 - [ ] Replace all pending markers in README and the presentation with verified artifact values.
 - [ ] Run the complete test suite in the documented environment and execute notebooks from a fresh kernel.
