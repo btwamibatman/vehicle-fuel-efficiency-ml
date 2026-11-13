@@ -7,6 +7,7 @@
 - [x] PCA artifacts include variance, loadings, coordinates, configuration and two figures.
 - [x] PCA source tests verify component output, train-only fitting and strict cluster joins.
 - [x] ANN handoff is present with its validation metrics and reproducibility metadata.
+- [x] Full project test suite passed: 34 tests with PyTorch 2.15.0+cpu on Python 3.12.
 
 ## Required from Askhat before final submission
 
