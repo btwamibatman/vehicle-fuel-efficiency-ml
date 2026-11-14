@@ -8,12 +8,6 @@ The endterm continues the midterm dataset and regression pipeline, adding
 **K-Means, PCA, a PyTorch feedforward ANN, refined classical tuning and a unified
 six-model comparison**. The shared data and preprocessing remain the foundation.
 
-## Latest update: start-stop and detailed transmission
-
-The controlled feature extension is complete on branch
-`khamza/start-stop-transmission`. It uses the same source bytes, row IDs and
-duplicate-grouped split, adding start-stop and replacing coarse transmission
-with the detailed `trany` category. No new data download or holdout evaluation.
 
 **Extended ANN validation:** MAE **0.805409 MPG**, RMSE **1.197025 MPG**,
 R-squared **0.962684**. The original ANN control has MAE 1.082715 MPG (25.61%
@@ -67,7 +61,7 @@ or evaluating the holdout again.
 The report is the presentation entry point. The numbered notebooks explain the
 individual methods; they are not competing final reports.
 
-## Original endterm results (before feature extension)
+## Original endterm results 
 
 Validation uses the same 2,080 rows for every model. Classical models use grouped
 five-fold CV within train. The ANN uses validation for early stopping and its
@@ -190,8 +184,3 @@ Results do not cover pre-2015 or excluded powertrains. One snapshot/seed,
 validation-based selection, related variants across partitions and prior holdout
 use limit generalization claims. Treat small group results cautiously; do not
 present group differences as causal or use predictions as certified fuel ratings.
-
-Keep the same dataset for the endterm comparison. A future, separate robustness
-study could predeclare make/model-grouped or time-based evaluation, or join
-verified weight/horsepower data. Such a study requires fresh evaluation and
-must be reported separately from these frozen results.
