@@ -124,6 +124,8 @@ def validate_schema(df: pd.DataFrame) -> None:
     for col in NUMERIC_COLUMNS:
         if not pd.api.types.is_numeric_dtype(df[col]):
             problems.append(f"{col} is not numeric (dtype={df[col].dtype})")
+        elif not np.isfinite(df[col].dropna().to_numpy(dtype=float)).all():
+            problems.append(f"{col} contains non-finite values")
     if df[TARGET].isna().any():
         problems.append(f"target '{TARGET}' contains missing values")
     if (df[TARGET].dropna() <= 0).any():
