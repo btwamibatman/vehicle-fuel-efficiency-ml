@@ -407,6 +407,17 @@ def verify_saved_run() -> dict:
             "predictions_and_metrics": "match", "test_evaluated": False}
 
 
+def _validate_smoke_predictions(predictions: np.ndarray, expected_rows: int) -> None:
+    """Reject incomplete or invalid predictions even under optimized Python."""
+    if len(predictions) != expected_rows:
+        raise ValueError(
+            f"ANN smoke check returned {len(predictions)} predictions "
+            f"for {expected_rows} validation rows"
+        )
+    if not np.isfinite(predictions).all():
+        raise ValueError("ANN smoke check produced non-finite predictions")
+
+
 def smoke_check() -> dict:
     """Three epochs on actual train/validation rows; no official artifacts written."""
     train, val, _ = load_training_data()
@@ -415,7 +426,7 @@ def smoke_check() -> dict:
     model, history = train_ann(X_train, y_train, X_val, y_val,
                                ANNConfig(max_epochs=3))
     predictions = model.predict(X_val)
-    assert len(predictions) == len(y_val) and np.isfinite(predictions).all()
+    _validate_smoke_predictions(predictions, len(y_val))
     return {"smoke_epochs": len(history), "train_rows": len(X_train),
             "val_rows": len(X_val), "test_evaluated": False}
 
