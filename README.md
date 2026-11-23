@@ -4,6 +4,9 @@ Predict EPA combined **US MPG** from vehicle specifications. This is supervised
 regression: MAE in MPG is the primary metric; RMSE and R-squared are secondary.
 Higher MPG means greater fuel efficiency.
 
+Final exam report: [`reports/Final_Exam_Report.pdf`](reports/Final_Exam_Report.pdf),
+including the complete study, literature review, bibliography and research proposal.
+
 The endterm continues the midterm dataset and regression pipeline, adding
 **K-Means, PCA, a PyTorch feedforward ANN, refined classical tuning and a unified
 six-model comparison**. The shared data and preprocessing remain the foundation.
