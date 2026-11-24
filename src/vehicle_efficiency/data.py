@@ -10,6 +10,8 @@ from __future__ import annotations
 
 import argparse
 import io
+import os
+import tempfile
 import urllib.request
 import zipfile
 from pathlib import Path
@@ -63,6 +65,27 @@ TRAIN_FRAC, VAL_FRAC, TEST_FRAC = 0.70, 0.15, 0.15
 SPLIT_NAMES = ("train", "val", "test")
 
 
+def _atomic_write(path: Path, content: bytes) -> None:
+    """Replace ``path`` only after its complete contents reach a temporary file."""
+    temporary_path: Path | None = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="wb",
+            dir=path.parent,
+            prefix=f".{path.name}.",
+            suffix=".tmp",
+            delete=False,
+        ) as temporary:
+            temporary_path = Path(temporary.name)
+            temporary.write(content)
+            temporary.flush()
+            os.fsync(temporary.fileno())
+        temporary_path.replace(path)
+    finally:
+        if temporary_path is not None:
+            temporary_path.unlink(missing_ok=True)
+
+
 def download_raw(force: bool = False) -> Path:
     """Download and unzip the EPA ``vehicles.csv`` into ``data/raw/`` (unchanged)."""
     RAW_DIR.mkdir(parents=True, exist_ok=True)
@@ -71,7 +94,8 @@ def download_raw(force: bool = False) -> Path:
     with urllib.request.urlopen(RAW_URL, timeout=120) as resp:
         payload = resp.read()
     with zipfile.ZipFile(io.BytesIO(payload)) as zf:
-        RAW_FILE.write_bytes(zf.read("vehicles.csv"))
+        dataset = zf.read("vehicles.csv")
+    _atomic_write(RAW_FILE, dataset)
     return RAW_FILE
 
 
