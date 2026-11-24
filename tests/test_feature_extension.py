@@ -1,4 +1,6 @@
 """Feature attachment, unchanged split identity and train-only extended models."""
+import json
+
 import numpy as np
 import pandas as pd
 import pytest
@@ -130,3 +132,50 @@ def test_protected_checksum_paths_are_portable_and_exclude_nested_extension(monk
     assert set(hashes) == {'data/raw/vehicles.csv', 'reports/results/endterm/metrics.json'}
     for relative, expected in hashes.items():
         assert extension.file_sha256(tmp_path / relative) == expected
+
+
+def test_verify_rejects_changed_manifest_without_relying_on_assert(monkeypatch, tmp_path):
+    import vehicle_efficiency.feature_extension as extension
+    metadata = {
+        'test_evaluated': False,
+        'protected_sha256': {},
+        'bundle_sha256': {},
+        'protocol': {'original_manifest': {'raw_sha256': 'expected'}},
+    }
+    (tmp_path / 'experiment_metadata.json').write_text(json.dumps(metadata))
+    monkeypatch.setattr(extension, 'RESULTS', tmp_path)
+    monkeypatch.setattr(extension, 'protected_hashes', lambda: {})
+    monkeypatch.setattr(
+        extension,
+        'load_extension_data',
+        lambda: (pd.DataFrame(), pd.DataFrame(), {'raw_sha256': 'changed'}),
+    )
+
+    with pytest.raises(ValueError, match='manifest'):
+        extension.verify()
+
+
+def test_verify_rejects_incomplete_result_tables_before_loading_models(monkeypatch, tmp_path):
+    import vehicle_efficiency.feature_extension as extension
+    manifest = {'raw_sha256': 'fixed'}
+    metadata = {
+        'test_evaluated': False,
+        'protected_sha256': {},
+        'bundle_sha256': {},
+        'protocol': {'original_manifest': manifest},
+    }
+    (tmp_path / 'experiment_metadata.json').write_text(json.dumps(metadata))
+    pd.DataFrame(columns=['variant', 'model']).to_csv(tmp_path / 'ablation_validation.csv', index=False)
+    pd.DataFrame(columns=['variant', 'model', 'row_id']).to_csv(
+        tmp_path / 'validation_predictions.csv', index=False
+    )
+    monkeypatch.setattr(extension, 'RESULTS', tmp_path)
+    monkeypatch.setattr(extension, 'protected_hashes', lambda: {})
+    monkeypatch.setattr(
+        extension,
+        'load_extension_data',
+        lambda: (pd.DataFrame(), pd.DataFrame({'row_id': [1]}), manifest),
+    )
+
+    with pytest.raises(ValueError, match='expected 18 metric rows and 18 predictions'):
+        extension.verify()

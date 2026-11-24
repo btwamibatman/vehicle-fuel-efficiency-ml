@@ -314,17 +314,24 @@ def verify() -> dict:
         if file_sha256(RESULTS / relative) != expected:
             raise ValueError(f'Extension artifact checksum mismatch: {relative}')
     train, validation, original = load_extension_data()
-    assert original == meta['protocol']['original_manifest']
+    if original != meta['protocol']['original_manifest']:
+        raise ValueError('Original dataset manifest does not match the recorded protocol')
     table = pd.read_csv(RESULTS / 'ablation_validation.csv')
     predictions = pd.read_csv(RESULTS / 'validation_predictions.csv')
+    expected_predictions = 18 * len(validation)
+    if len(table) != 18 or len(predictions) != expected_predictions:
+        raise ValueError(
+            'Incomplete extension results: expected 18 metric rows and '
+            f'{expected_predictions} predictions, got {len(table)} and {len(predictions)}'
+        )
     models = joblib.load(RESULTS / 'classical_models.joblib')
-    assert len(table) == 18 and len(predictions) == 18 * len(validation)
     for variant in VARIANTS:
         ann = load_ann(RESULTS / f'ann_{variant}', expected_manifest=variant_manifest(original, variant))
         Xv = validation[input_columns(variant)]
         for name in [*SPECS, 'Feedforward ANN']:
             p = predictions[(predictions.variant == variant) & (predictions.model == name)]
-            assert p.row_id.is_unique
+            if not p.row_id.is_unique:
+                raise ValueError(f'Duplicate prediction row IDs for {variant}/{name}')
             np.testing.assert_array_equal(p.row_id, validation.row_id)
             np.testing.assert_array_equal(p.y_true, validation.mpg)
             model = ann if name == 'Feedforward ANN' else models[(variant, name)]
@@ -333,7 +340,8 @@ def verify() -> dict:
             for key, value in compute_metrics(p.y_true, p.y_pred).items():
                 np.testing.assert_allclose(value, row[f'validation_{key}'], rtol=0, atol=1e-10)
     cv = pd.read_csv(RESULTS / 'cv_folds.csv')
-    assert len(cv) == 75
+    if len(cv) != 75:
+        raise ValueError(f'Incomplete cross-validation results: expected 75 rows, got {len(cv)}')
     for (variant, name), group in cv.groupby(['variant', 'model']):
         row = table[(table.variant == variant) & (table.model == name)].iloc[0]
         np.testing.assert_allclose(group.mae.mean(), row.cv_mae, rtol=0, atol=1e-10)
