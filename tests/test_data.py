@@ -1,10 +1,15 @@
 """Checks for schema validation, scope filtering, split overlap and the real dataset."""
+import io
+from pathlib import Path
+import zipfile
+
 import pandas as pd
 import pytest
 
+from vehicle_efficiency import data as data_module
 from vehicle_efficiency.data import (COLUMNS, GROUP_COLUMNS, MIN_YEAR, RAW_FILE,
-                                     RAW_TO_PROJECT, load_dataset, make_splits,
-                                     prepare, validate_schema)
+                                     RAW_TO_PROJECT, download_raw, load_dataset,
+                                     make_splits, prepare, validate_schema)
 
 
 def tiny_frame(n=200, n_duplicates=20):
@@ -49,6 +54,53 @@ def raw_like_frame():
         "t_charger": [None, None, None, "T", None, None],
         "s_charger": [None] * 6,
     })
+
+
+def _dataset_archive(content: bytes) -> bytes:
+    archive = io.BytesIO()
+    with zipfile.ZipFile(archive, mode="w") as zipped:
+        zipped.writestr("vehicles.csv", content)
+    return archive.getvalue()
+
+
+def test_download_replaces_dataset_atomically(tmp_path, monkeypatch):
+    raw_file = tmp_path / "raw" / "vehicles.csv"
+    monkeypatch.setattr(data_module, "RAW_DIR", raw_file.parent)
+    monkeypatch.setattr(data_module, "RAW_FILE", raw_file)
+    payload = _dataset_archive(b"year,comb08\n2024,30\n")
+    monkeypatch.setattr(
+        data_module.urllib.request,
+        "urlopen",
+        lambda *_args, **_kwargs: io.BytesIO(payload),
+    )
+
+    assert download_raw() == raw_file
+    assert raw_file.read_bytes() == b"year,comb08\n2024,30\n"
+    assert list(raw_file.parent.glob(".vehicles.csv.*.tmp")) == []
+
+
+def test_failed_atomic_replace_preserves_existing_dataset(tmp_path, monkeypatch):
+    raw_file = tmp_path / "raw" / "vehicles.csv"
+    raw_file.parent.mkdir(parents=True)
+    raw_file.write_bytes(b"known-good")
+    monkeypatch.setattr(data_module, "RAW_DIR", raw_file.parent)
+    monkeypatch.setattr(data_module, "RAW_FILE", raw_file)
+    payload = _dataset_archive(b"replacement")
+    monkeypatch.setattr(
+        data_module.urllib.request,
+        "urlopen",
+        lambda *_args, **_kwargs: io.BytesIO(payload),
+    )
+
+    def fail_replace(_self: Path, _target: Path) -> None:
+        raise OSError("simulated replace failure")
+
+    monkeypatch.setattr(Path, "replace", fail_replace)
+
+    with pytest.raises(OSError, match="simulated replace failure"):
+        download_raw(force=True)
+    assert raw_file.read_bytes() == b"known-good"
+    assert list(raw_file.parent.glob(".vehicles.csv.*.tmp")) == []
 
 
 def test_prepare_filters_scope_and_derives_flags():
