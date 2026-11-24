@@ -99,6 +99,15 @@ def test_schema_rejects_missing_target_and_out_of_scope_fuel():
     assert "target" in str(exc.value) and "fuel types" in str(exc.value)
 
 
+@pytest.mark.parametrize("column", ["mpg", "displacement", "cylinders"])
+def test_schema_rejects_nonfinite_numeric_values(column):
+    df = tiny_frame()
+    df.loc[0, column] = float("inf")
+
+    with pytest.raises(ValueError, match=rf"{column} contains non-finite values"):
+        validate_schema(df)
+
+
 def test_splits_do_not_overlap_and_cover_everything():
     df = tiny_frame()
     s = make_splits(df)
