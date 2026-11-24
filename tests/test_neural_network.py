@@ -9,8 +9,8 @@ from scipy import sparse
 from vehicle_efficiency.data import RAW_FILE
 from vehicle_efficiency.evaluation import compute_metrics
 from vehicle_efficiency.neural_network import (
-    ANNConfig, _dense_float32, load_ann, load_training_data,
-    save_ann, train_ann, verify_manifest,
+    ANNConfig, _dense_float32, _validate_smoke_predictions, load_ann,
+    load_training_data, save_ann, train_ann, verify_manifest,
 )
 from vehicle_efficiency.preprocessing import RAW_FEATURES, split_xy
 
@@ -41,6 +41,14 @@ def test_dense_conversion_handles_sparse_and_rejects_nonfinite():
     np.testing.assert_array_equal(_dense_float32(matrix.toarray()), dense)
     with pytest.raises(ValueError, match="non-finite"):
         _dense_float32(np.array([[np.inf]]))
+
+
+def test_smoke_prediction_validation_rejects_wrong_length_and_nonfinite_values():
+    _validate_smoke_predictions(np.array([1.0, 2.0]), expected_rows=2)
+    with pytest.raises(ValueError, match="1 predictions for 2 validation rows"):
+        _validate_smoke_predictions(np.array([1.0]), expected_rows=2)
+    with pytest.raises(ValueError, match="non-finite"):
+        _validate_smoke_predictions(np.array([1.0, np.nan]), expected_rows=2)
 
 
 def test_training_only_imputation_scaling_and_unknown_categories(real_rows):
