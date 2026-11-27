@@ -121,6 +121,12 @@ def validate_schema(df: pd.DataFrame) -> None:
     if len(df) == 0:
         raise ValueError("Dataset is empty")
     problems: list[str] = []
+    if not pd.api.types.is_integer_dtype(df["row_id"]):
+        problems.append(f"row_id is not integer (dtype={df['row_id'].dtype})")
+    if df["row_id"].isna().any():
+        problems.append("row_id contains missing values")
+    if df["row_id"].duplicated().any():
+        problems.append("row_id contains duplicate values")
     for col in NUMERIC_COLUMNS:
         if not pd.api.types.is_numeric_dtype(df[col]):
             problems.append(f"{col} is not numeric (dtype={df[col].dtype})")
