@@ -99,6 +99,24 @@ def test_schema_rejects_missing_target_and_out_of_scope_fuel():
     assert "target" in str(exc.value) and "fuel types" in str(exc.value)
 
 
+def test_schema_rejects_duplicate_row_ids():
+    df = tiny_frame()
+    df.loc[1, "row_id"] = df.loc[0, "row_id"]
+
+    with pytest.raises(ValueError, match="row_id contains duplicate values"):
+        validate_schema(df)
+
+
+@pytest.mark.parametrize("invalid", [None, 1.5])
+def test_schema_rejects_non_integer_row_ids(invalid):
+    df = tiny_frame()
+    df["row_id"] = df["row_id"].astype(float)
+    df.loc[0, "row_id"] = invalid
+
+    with pytest.raises(ValueError, match="row_id is not integer"):
+        validate_schema(df)
+
+
 def test_splits_do_not_overlap_and_cover_everything():
     df = tiny_frame()
     s = make_splits(df)
